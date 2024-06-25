@@ -1,0 +1,12 @@
+.bc3 {
+    font-size: inherit
+}
+
+.liBred {
+    display: inline
+}
+
+.liBred a {
+    display: inline;
+    margin: 0 3px 0 0
+}
