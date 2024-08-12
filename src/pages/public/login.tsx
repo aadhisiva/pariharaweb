@@ -8,8 +8,8 @@ import { postRequest } from "../../axios/axiosRequest";
 import { ButtonComponent } from "../../components/ButtonComponent";
 import { allRoles } from "../../utils/constData";
 import { useDispatch } from "react-redux";
-import { otpVerification, userLoggedIn } from "../../redux/actions/userAction";
 import UseAuth from "../../components/customComponenets/useAuth";
+import { userLoggedIn } from "../../reducers/authReducer";
 
 const Login = () => {
   const [validated, setValidated] = useState(false);
@@ -37,6 +37,7 @@ const Login = () => {
     }
     return () => clearInterval(intervalId);
   }, [timer]);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     setButtonActive(true);
     event.preventDefault();
@@ -46,9 +47,8 @@ const Login = () => {
     if (form.checkValidity() === true) {
       // make it true when you are using api
       event.stopPropagation();
-      let res = await postRequest("sendOtp", { Mobile, RoleId });
-      if (res.code === 200) {
-        setUsersData(res?.data);
+      let res = await postRequest("sendOtp", {Mobile, RoleId});
+        setUsersData(res);
         setIsOtpValidate(true);
         setButtonActive(false);
         setTimer(60);
@@ -58,12 +58,8 @@ const Login = () => {
           Mobile
         }
         dispatch(userLoggedIn(body));
-      } else {
-        setButtonActive(false);
-        setIsOtpValidate(false);
-        alert(res?.response?.data?.message || "Please try again.");
-      }
     }
+    setIsOtpValidate(false);
     setValidated(true);
   };
 
@@ -73,7 +69,7 @@ const Login = () => {
     if (form.checkValidity() === true) {
       // make it true when you are using api
       event.stopPropagation();
-      dispatch(otpVerification(""));
+      // dispatch(otpVerification(""));
     }
     setValidatedForm2(true);
   };

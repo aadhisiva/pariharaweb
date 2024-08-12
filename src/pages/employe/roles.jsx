@@ -5,24 +5,19 @@ import { ButtonComponent } from '../../components/ButtonComponent';
 import RolesOffCanvas from '../../components/offcanvas/rolesOffCanvas';
 import { postRequest } from '../../axios/axiosRequest';
 import Breadcrumbs from '../../components/common/breadcrumbs';
-
-const newArray = [];
-for (let i = 0; i < 20; i++) {
-    let obj = {
-        Role: `Role ${i}`,
-    }
-    newArray.push(obj);
-};
+import { SpinnerLoader } from '../../components/spinner/spinner';
 
 export default function Roles() {
-    const [originalData, setOriginalData] = useState(newArray);
-    const [copyOforiginalData, setCopyOfOriginalData] = useState(newArray);
+    const [originalData, setOriginalData] = useState([]);
+    const [copyOforiginalData, setCopyOfOriginalData] = useState([]);
 
-    const [showModal, SetShowModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     const [modalTitle, SetModalTitle] = useState("");
+    const [formData, setFormData] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const columns = [
-        { accessor: "Role", label: "Role" },
+        { accessor: "RoleName", label: "Role" },
         { accessor: "Action", label: "Action" },
     ];
 
@@ -30,42 +25,50 @@ export default function Roles() {
         getIntitalRequest();
     }, []);
 
-    const getIntitalRequest =async  () =>{
-        let saveData = await postRequest("save");
-        if (saveData.code == 200) {
-            SetShowModal(false);
-        } else {
-            SetShowModal(false);
-        }
+    const getIntitalRequest = async () => {
+        setLoading(true);
+        let saveData = await postRequest("addRolesOrGet", { ReqType: "Get" });
+        setOriginalData(saveData);
+        setCopyOfOriginalData(saveData);
+        setShowModal(false);
+        setLoading(false);
     }
 
     const hanldeClickAdd = () => {
-        SetShowModal(true);
+        setFormData({});
+        setShowModal(true);
         SetModalTitle("Add");
     };
 
-    const handleSubmitForm = async (formData) => {
-        let saveData = await postRequest("save", formData);
-        if (saveData.code == 200) {
-            SetShowModal(false);
-            await getIntitalRequest();
-        } else {
-            SetShowModal(false);
-        }
+    const hanldeClickModify = (obj) => {
+        setFormData(obj);
+        setShowModal(true);
+        SetModalTitle("Modify");
+    };
+
+    const handleSubmitForm = async (values) => {
+        setLoading(true);
+        values['ReqType'] = "Add";
+        await postRequest("addRolesOrGet", values);
+        setShowModal(false);
+        await getIntitalRequest();
+        setLoading(false);
     }
 
     const openOffCanvas = () => {
         return (
             <RolesOffCanvas
-                handleClose={() => SetShowModal(false)}
+                handleClose={() => setShowModal(false)}
                 show={showModal}
                 title={modalTitle}
+                formData={formData}
                 handleSubmitForm={handleSubmitForm} />
         );
     };
 
     return (
-        <div>
+        <>
+            <SpinnerLoader isLoading={loading} />
             <Breadcrumbs path={["Roles"]} />
             {showModal ? openOffCanvas() : ("")}
             <Row className='flex m-2'>
@@ -76,7 +79,8 @@ export default function Roles() {
             <CustomTable
                 columns={columns}
                 rows={originalData}
+                handleClickModify={hanldeClickModify}
             />
-        </div>
+        </>
     )
 }

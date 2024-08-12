@@ -1,11 +1,14 @@
 import axios from "axios";
-// const BaseUrl = "http://103.138.196.123/mapi/";
-const BaseUrl = "http://localhost:8881/api/admin/";
+import axiosInstance from "../axiosInstance";
 
 export const postRequest = async (url, body) => {
     try {
-        let getData = await axios.post(BaseUrl + url, body);
-        return getData.data;
+        let getData = await axiosInstance.post(url, body);
+        if(getData.data?.code == 200){
+            return getData.data.data;
+        } else {
+            return alert(getData.data.message || "Please try again");
+        };
     } catch (e) {
         return e;
     }
@@ -13,7 +16,11 @@ export const postRequest = async (url, body) => {
 export const postRequestWithHeaders = async (url, body, headers) => {
     try {
         let getData = await axios.post(url, body, { headers: headers });
-        return getData.data;
+        if(getData.code == 200){
+            return getData.data;
+        } else {
+            alert(getData.data.message || "Please try again");
+        };
     } catch (e) {
         return e;
     }

@@ -10,7 +10,7 @@ import "./customTable.css";
 export const CustomTable = ({
     columns,
     rows,
-    handleCLickModify = undefined,
+    handleClickModify = undefined,
     handleChangeRoutes = undefined,
     title
 }) => {
@@ -173,7 +173,7 @@ export const CustomTable = ({
                                             >
                                                 <Button
                                                     style={{ backgroundColor: "#13678C", fontSize: 10 }}
-                                                    onClick={() => handleCLickModify(row, "Modify")}
+                                                    onClick={() => handleClickModify(row, "Modify")}
                                                 >
                                                     {title ?? "Modify"}
                                                 </Button>

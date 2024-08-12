@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 interface authPropsI {
-  auth: userPropsI;
+  user: userPropsI;
 }
 
 interface userPropsI {
@@ -15,6 +15,6 @@ interface userPropsI {
     access?: any[]
 }
 export default function UseAuth() {
-  const data = useSelector((state: authPropsI) => state.auth);
+  const data = useSelector((state: authPropsI) => state.user);
   return [data];
 }

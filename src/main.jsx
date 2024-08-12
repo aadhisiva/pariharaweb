@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { store } from './redux/store';
+import { store } from './store/configureStore';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   

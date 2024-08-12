@@ -2,11 +2,12 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { CustomTable } from '../../components/customTable/customTable'
 import { Col, Row } from 'react-bootstrap';
 import { ButtonComponent } from '../../components/ButtonComponent';
-import RolesOffCanvas from '../../components/offcanvas/rolesOffCanvas';
 import { postRequest } from '../../axios/axiosRequest';
 import Breadcrumbs from '../../components/common/breadcrumbs';
-import Checkbox from '../../components/formOptions/checkbox';
 import SelectOption from '../../components/formOptions/selectOption';
+import ManagementOffCanvas from '../../components/offcanvas/managementOffCanvas';
+import { useSearchParams } from 'react-router-dom';
+import { SpinnerLoader } from '../../components/spinner/spinner';
 
 const newArray = [];
 for (let i = 0; i < 100; i++) {
@@ -33,6 +34,8 @@ export default function Management() {
     Village: ''
   });
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [showModal, setShowModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
 
@@ -42,6 +45,7 @@ export default function Management() {
   const [talukDropDown, setTalukDropDown] = useState([]);
   const [hobliDropDown, setGpDropDown] = useState([]);
   const [villageDropDown, setVillageDropDown] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const columns = [
     { accessor: "Role", label: "Role" },
@@ -53,6 +57,30 @@ export default function Management() {
     { accessor: "Action", label: "Action" },
   ];
 
+  const columnsTaluk = [
+    { accessor: "Role", label: "Role" },
+    { accessor: "Mobile", label: "Mobile" },
+    { accessor: "DistrictName", label: "District" },
+    { accessor: "TalukName", label: "Taluk" }, ,
+    { accessor: "Action", label: "Action" },
+  ];
+
+  const columnsDistrict = [
+    { accessor: "Role", label: "Role" },
+    { accessor: "Mobile", label: "Mobile" },
+    { accessor: "DistrictName", label: "District" },
+    { accessor: "Action", label: "Action" },
+  ];
+
+  const columnsHobli = [
+    { accessor: "Role", label: "Role" },
+    { accessor: "Mobile", label: "Mobile" },
+    { accessor: "DistrictName", label: "District" },
+    { accessor: "TalukName", label: "Taluk" },
+    { accessor: "HobliName", label: "Hobli" },
+    { accessor: "Action", label: "Action" },
+  ];
+
   const { AssignType, District, Hobli, Taluk, Village } = selectedItems; // destructured all values from selectedItems
 
   useEffect(() => {
@@ -60,35 +88,34 @@ export default function Management() {
   }, []);
 
   const getIntitalRequest = async () => {
-    let saveData = await postRequest("save");
-    if (saveData.code == 200) {
-      setShowModal(false);
-    } else {
-      setShowModal(false);
-    }
+    setLoading(true);
+    // let saveData = await postRequest("assigningProcess", { ReqType: "Get" });
+    let masters = await postRequest("retriveMasters", {DistrictCode: ""});
+    setDistrictDropDown(masters);
+    // setOriginalData(saveData);
+    // setCopyOfOriginalData(saveData);
+    setShowModal(false);
+    setLoading(false);
   }
 
-  const hanldeClickAdd = () => {
-    setShowModal(true);
-    setModalTitle("Add");
-  };
-
   const handleSubmitForm = async (formData) => {
-    let saveData = await postRequest("save", formData);
-    if (saveData.code == 200) {
-      SetShowModal(false);
-      await getIntitalRequest();
+    // let saveData = await postRequest("save", formData);
+    if (200 == 200) {
+      setShowModal(false);
+      setSearchParams(`showData=${AssignType}`, { replace: true });
+      // await getIntitalRequest();
     } else {
-      SetShowModal(false);
+      setShowModal(false);
     }
   }
 
   const openOffCanvas = () => {
     return (
-      <RolesOffCanvas
+      <ManagementOffCanvas
         handleClose={() => setShowModal(false)}
         show={showModal}
         title={modalTitle}
+        formData={selectedItems}
         handleSubmitForm={handleSubmitForm} />
     );
   };
@@ -103,19 +130,12 @@ export default function Management() {
         Hobli: "",
         Village: "",
       });
-      let rural_urban = Array.from(
-        new Set(
-          originalData
-            .filter((obj) => obj.Type === value)
-            .map((obj) => obj.DistrictName)
-        )
-      );
-      setDistrictDropDown(rural_urban);
     }
   };
 
-  const handleDistrictSelect = (value) => {
-    if (district !== value) {
+  const handleDistrictSelect = async (value) => {
+    setLoading(true);
+    if (District !== value) {
       setSelectedItems({
         ...selectedItems,
         District: value,
@@ -123,18 +143,14 @@ export default function Management() {
         Hobli: "",
         Village: "",
       });
-      let talukSelect = Array.from(
-        new Set(
-          originalData
-            .filter((obj) => obj.Type === type && obj.DistrictName === value)
-            .map((obj) => obj.TalukName)
-        )
-      );
-      setTalukDropDown(talukSelect);
+      let masters = await postRequest("retriveMasters", {DistrictCode: value});
+      setTalukDropDown(masters[0].TalukArray.map(obj => { return {value: obj.TalukCode, name: obj.TalukName}}));
+      setLoading(false);
     }
+    setLoading(false);
   };
 
-  const handleTalukSelect = (value) => {
+  const handleTalukSelect = async (value) => {
     if (taluk !== value) {
       setSelectedItems({
         ...selectedItems,
@@ -142,19 +158,10 @@ export default function Management() {
         Hobli: "",
         Village: "",
       });
-      let gpSelect = Array.from(
-        new Set(
-          originalData
-            .filter(
-              (obj) =>
-                obj.Type === type &&
-                obj.DistrictName === district &&
-                obj.TalukName === value
-            )
-            .map((obj) => obj.GramPanchayatName)
-        )
-      );
-      setGpDropDown(gpSelect);
+      let masters = await postRequest("retriveMasters", {DistrictCode: District});
+      setTalukDropDown(masters[0].TalukArray[value]);
+      setGpDropDown((masters[0].TalukArray[value]));
+      setLoading(false);
     }
   };
 
@@ -204,10 +211,18 @@ export default function Management() {
 
   const handleClickAdd = (items) => {
     if (!items.AssignType) return alert("Select AssignType");
-  }
+    setModalTitle("Add");
+    setShowModal(true);
+  };
+  console.log("districtDropDown",districtDropDown)
 
+  const persistDataFromUrl = searchParams.get('showData');
+  const isShowDistrict = persistDataFromUrl == "District";
+  const isShowTaluk = persistDataFromUrl == "Taluk";
+  const isShowHobli = persistDataFromUrl == "Hobli";
   return (
     <div>
+      <SpinnerLoader isLoading={loading} />
       <Breadcrumbs path={["Emp-Management"]} />
       {showModal ? openOffCanvas() : ("")}
       <Row className="flex ml-12 m-3 mb-0">
@@ -229,9 +244,10 @@ export default function Management() {
             <Col md={3} sm={6}>
               <SelectOption
                 defaultOption="Select District"
-                options={districtDropDown}
+                options={districtDropDown.map(obj => { return {value: obj.DistrictCode, name: obj.DistrictName}})}
                 onChange={(e) => handleDistrictSelect(e.target.value)}
                 value={District}
+                isCodeAvialable={true}
               />
             </Col>
             {AssignType !== "District" && (
@@ -278,24 +294,17 @@ export default function Management() {
           <ButtonComponent color="#13678C" onClick={handleClearFilters} name={"Clear Filters"} />
         </Col>
       </Row>
-      {/* <Row className='m-3'>
-        <Col md={3} sm={6}>
-          <ButtonComponent color={showAssignedData == 0 ? "green" : ""} onClick={() => SetShowAssignedData(0)} name={"District Data"} />
-        </Col>
-        <Col md={3} sm={6}>
-          <ButtonComponent color={showAssignedData == 1 ? "green" : ""} onClick={() => SetShowAssignedData(1)} name={"Taluk Data"} />
-        </Col>
-        <Col md={3} sm={6}>
-          <ButtonComponent color={showAssignedData == 2 ? "green" : ""} onClick={() => SetShowAssignedData(2)} name={"Hobli Data"} />
-        </Col>
-        <Col md={3} sm={6}>
-          <ButtonComponent color={showAssignedData == 3 ? "green" : ""} onClick={() => SetShowAssignedData(3)} name={"Village Data"} />
-        </Col>
-      </Row> */}
-      <CustomTable
-        columns={columns}
-        rows={originalData}
-      />
+        <CustomTable
+          columns={isShowDistrict ? columnsDistrict : isShowTaluk ? columnsTaluk : isShowHobli ? columnsHobli : columns}
+          rows={originalData}
+          />
+          {/* {persistDataFromUrl ? (
+      ) : (
+        <>
+          <span className='flex justify-center'>No Record...</span>
+          <span className='flex justify-center'>Assign Some values...</span>
+        </>
+      )} */}
     </div>
   )
 }
