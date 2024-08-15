@@ -1,4 +1,4 @@
-import { DASHBOARD, EMP_ASSIGN, EMP_MANAGE, EMP_ROLES, FEEDBACK, LOSSTYPE, LOSS_DETAILS } from "./routePaths";
+import { ASSIGN_DISTRICT, ASSIGN_GP, ASSIGN_TALUK, DASHBOARD, DIS_MASTER, EMP_ASSIGN, EMP_MANAGE, EMP_ROLES, FEEDBACK, GP_MASTER, LOSSTYPE, LOSS_DETAILS, TAL_MASTER, VILLAGE_MASTER } from "./routePaths";
 
 
 export const LOGGED_IN = "LOGGED_IN";
@@ -108,6 +108,18 @@ export const routes = [
             {
                 name: "Management",
                 path: EMP_MANAGE
+            },
+            {
+                name: "Assign District",
+                path: ASSIGN_DISTRICT
+            },
+            {
+                name: "Assign Taluk",
+                path: ASSIGN_TALUK
+            },
+            {
+                name: "Assign Gp",
+                path: ASSIGN_GP
             }
         ]
     },
@@ -122,6 +134,29 @@ export const routes = [
         path: LOSS_DETAILS,
         child: [],
         icon: "bi bi-chat-dots"
+    },
+    {
+        name: "Masters",
+        path: (DIS_MASTER || TAL_MASTER || GP_MASTER || VILLAGE_MASTER),
+        icon: "bi bi-people",
+        child: [
+            {
+                name: "Districts",
+                path: DIS_MASTER
+            },
+            {
+                name: "Taluk",
+                path: TAL_MASTER
+            },
+            {
+                name: "Grama Panchayat",
+                path: GP_MASTER
+            },
+            {
+                name: "Village",
+                path: VILLAGE_MASTER
+            }
+        ]
     },
 ];
 
