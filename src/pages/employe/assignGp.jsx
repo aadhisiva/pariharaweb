@@ -8,10 +8,11 @@ import { ButtonComponent } from '../../components/ButtonComponent';
 import AssignmentOffCanvas from '../../components/offcanvas/assignmentOffCanvas';
 import axiosInstance from '../../axiosInstance';
 import { SpinnerLoader } from '../../components/spinner/spinner';
-import { SelectMasters } from '../../components/selectMasters';
+import { SelectDistricts } from '../../components/loginWiseDropdowns/selectDistrict';
 import DistrictOffCanvas from '../../components/offcanvas/districtOffCanvas';
 import TalukOffCanvas from '../../components/offcanvas/talukOffCanvas';
 import GpOffCanvas from '../../components/offcanvas/gpOffCanvas';
+import { SelectGp } from '../../components/loginWiseDropdowns/selectGp';
 
 export default function AssignGP() {
   const [originalData, setOriginalData] = useState([]);
@@ -94,8 +95,8 @@ export default function AssignGP() {
     <div>
       <SpinnerLoader isLoading={loading} />
       {showModal ? openOffCanvas() : ("")}
-      <Breadcrumbs path={["Assign Taluk"]} />
-      <SelectMasters
+      <Breadcrumbs path={["Assign Gp"]} />
+      <SelectGp 
       handleClickAdd={handleClickAdd}
       listType={3} />
       <CustomTable

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Form } from 'react-bootstrap'
 
-export default function SelectOption({ options, isCodeAvialable, defaultOption= false, label='', name, onChange, value, errors, isInvalid, onBlur, disabled }) {
+export default function SelectOption({ options, isCodeAvialable, defaultOption= "", label='', name, onChange, value, errors, isInvalid, onBlur, disabled=false }) {
     return (
         <Form.Group controlId={label}>
            {label ? <Form.Label>{label}</Form.Label> : ""}

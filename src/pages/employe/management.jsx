@@ -214,7 +214,6 @@ export default function Management() {
     setModalTitle("Add");
     setShowModal(true);
   };
-  console.log("districtDropDown",districtDropDown)
 
   const persistDataFromUrl = searchParams.get('showData');
   const isShowDistrict = persistDataFromUrl == "District";

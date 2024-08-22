@@ -1,4 +1,9 @@
-import { ASSIGN_DISTRICT, ASSIGN_GP, ASSIGN_TALUK, DASHBOARD, DIS_MASTER, EMP_ASSIGN, EMP_MANAGE, EMP_ROLES, FEEDBACK, GP_MASTER, LOSSTYPE, LOSS_DETAILS, TAL_MASTER, VILLAGE_MASTER } from "./routePaths";
+import {
+    ASSIGN_DISTRICT, ASSIGN_GP, ASSIGN_TALUK, DASHBOARD, DIS_MASTER,
+    EMP_ASSIGN, EMP_MANAGE, EMP_ROLES, FEEDBACK, GP_MASTER, LOSSTYPE, LOSS_DETAILS,
+    ROLE_ACCESS_PATH, ASSIGN_VILLAGE,
+    TAL_MASTER, VILLAGE_MASTER
+} from "./routePaths";
 
 
 export const LOGGED_IN = "LOGGED_IN";
@@ -63,26 +68,28 @@ export const dashBoardSats = [
     },
 ];
 
-export const routes = [
-    // {
-    //     name: "Dashboard",
-    //     path: DASHBOARD,
-    //     child: [
-    //         {
-    //             name: "Statistics",
-    //             path: DASHBOARD_SATS,
-    //             child: []
-    //         },
-    //         {
-    //             name: "Menu",
-    //             path: DASHBOARD_SATS,
-    //             child: []
-    //         },
-    //     ]
-    // },
+export const routesOfSuperAdmin = [
     {
         name: "Dashboard",
         path: DASHBOARD,
+        child: [],
+        icon: "bi bi-speedometer"
+    },
+    {
+        name: "Roles",
+        path: EMP_ROLES,
+        child: [],
+        icon: "bi bi-speedometer"
+    },
+    {
+        name: "Role Access",
+        path: ROLE_ACCESS_PATH,
+        child: [],
+        icon: "bi bi-speedometer"
+    },
+    {
+        name: "Assign District",
+        path: ASSIGN_DISTRICT,
         child: [],
         icon: "bi bi-speedometer"
     },
@@ -92,43 +99,12 @@ export const routes = [
         child: [],
         icon: "bi bi-justify"
     },
-    {
-        name: "Employee",
-        path: (EMP_ASSIGN || EMP_MANAGE),
-        icon: "bi bi-people",
-        child: [
-            {
-                name: "Roles",
-                path: EMP_ROLES
-            },
-            {
-                name: "Assignemnt",
-                path: EMP_ASSIGN
-            },
-            {
-                name: "Management",
-                path: EMP_MANAGE
-            },
-            {
-                name: "Assign District",
-                path: ASSIGN_DISTRICT
-            },
-            {
-                name: "Assign Taluk",
-                path: ASSIGN_TALUK
-            },
-            {
-                name: "Assign Gp",
-                path: ASSIGN_GP
-            }
-        ]
-    },
-    {
-        name: "Feedback",
-        path: FEEDBACK,
-        child: [],
-        icon: "bi bi-chat-dots"
-    },
+    // {
+    //     name: "Feedback",
+    //     path: FEEDBACK,
+    //     child: [],
+    //     icon: "bi bi-chat-dots"
+    // },
     {
         name: "Loss Details",
         path: LOSS_DETAILS,
@@ -158,6 +134,88 @@ export const routes = [
             }
         ]
     },
+];
+
+export const routesOfDistrict = [
+    {
+        name: "Dashboard",
+        path: DASHBOARD,
+        child: [],
+        icon: "bi bi-speedometer"
+    },
+
+    {
+        name: "Assign Taluk",
+        path: ASSIGN_TALUK,
+        child: [],
+        icon: "bi bi-speedometer"
+    },
+    {
+        name: "Loss Data",
+        path: LOSSTYPE,
+        child: [],
+        icon: "bi bi-justify"
+    },
+    {
+        name: "Loss Details",
+        path: LOSS_DETAILS,
+        child: [],
+        icon: "bi bi-chat-dots"
+    }
+];
+
+export const routesOfTaluk = [
+    {
+        name: "Dashboard",
+        path: DASHBOARD,
+        child: [],
+        icon: "bi bi-speedometer"
+    },
+    {
+        name: "Assign Gp",
+        path: ASSIGN_GP,
+        child: [],
+        icon: "bi bi-speedometer"
+    },
+    {
+        name: "Loss Data",
+        path: LOSSTYPE,
+        child: [],
+        icon: "bi bi-justify"
+    },
+    {
+        name: "Loss Details",
+        path: LOSS_DETAILS,
+        child: [],
+        icon: "bi bi-chat-dots"
+    }
+];
+
+export const routesOfGp = [
+    {
+        name: "Dashboard",
+        path: DASHBOARD,
+        child: [],
+        icon: "bi bi-speedometer"
+    },
+    {
+        name: "Assign Village",
+        path: ASSIGN_VILLAGE,
+        child: [],
+        icon: "bi bi-speedometer"
+    },
+    {
+        name: "Loss Data",
+        path: LOSSTYPE,
+        child: [],
+        icon: "bi bi-justify"
+    },
+    {
+        name: "Loss Details",
+        path: LOSS_DETAILS,
+        child: [],
+        icon: "bi bi-chat-dots"
+    }
 ];
 
 // export const tableData = [

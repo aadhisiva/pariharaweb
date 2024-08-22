@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 import SidebarLinkGroup from './SidebarLinkGroup';
-import { routes } from '../utils/constData';
+import { routesOfSuperAdmin, routesOfDistrict, routesOfGp, routesOfTaluk } from '../utils/constData';
 import { Image } from 'react-bootstrap';
 import GKImage from "../images/Gk.png"
+import { UseAuth } from '../components/customComponenets/useAuth';
 
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const location = useLocation();
@@ -12,22 +13,24 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
   const trigger = useRef(null);
   const sidebar = useRef(null);
+  const [{RoleAccess}] = UseAuth();
 
+console.log("RoleAccess",RoleAccess)
   const navigate = useNavigate();
 
   const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');
   const [sidebarExpanded, setSidebarExpanded] = useState(storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true');
-
+  
   // close on click outside
-  useEffect(() => {
-    const clickHandler = ({ target }) => {
-      if (!sidebar.current || !trigger.current) return;
-      if (!sidebarOpen || sidebar.current.contains(target) || trigger.current.contains(target)) return;
-      setSidebarOpen(false);
-    };
-    document.addEventListener('click', clickHandler);
-    return () => document.removeEventListener('click', clickHandler);
-  });
+  // useEffect(() => {
+  //   const clickHandler = ({ target }) => {
+    //     if (!sidebar.current || !trigger.current) return;
+  //     if (!sidebarOpen || sidebar.current.contains(target) || trigger.current.contains(target)) return;
+  //     setSidebarOpen(false);
+  //   };
+  //   document.addEventListener('click', clickHandler);
+  //   return () => document.removeEventListener('click', clickHandler);
+  // });
 
   // close if the esc key is pressed
   useEffect(() => {
@@ -47,6 +50,12 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
       document.querySelector('body').classList.remove('sidebar-expanded');
     }
   }, [sidebarExpanded]);
+  
+  let routes = RoleAccess.District == "Yes" ?
+  routesOfSuperAdmin :  RoleAccess.Taluk == "Yes" ?
+  routesOfDistrict :  RoleAccess.Gp == "Yes" ?
+  routesOfTaluk :  RoleAccess.Village == "Yes" ?
+  routesOfGp : [];
 
   return (
     <div>
@@ -175,7 +184,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
           <div className="px-3 py-2">
             <button onClick={() => setSidebarExpanded(!sidebarExpanded)}>
               <span className="sr-only">Expand / collapse sidebar</span>
-              <i className="bi bi-arrow-bar-left text-3xl text-white txt font-bold"></i>
+              <i className={`bi bi-arrow-bar-${!sidebarExpanded ? "right" : "left"} text-3xl text-white txt font-bold`}></i>
             </button>
           </div>
         </div>

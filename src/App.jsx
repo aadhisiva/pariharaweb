@@ -1,7 +1,6 @@
 import React, { Suspense, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import './css/style.css';
-import './charts/ChartjsConfig';
 
 import Auth from './authRoutes/auth';
 

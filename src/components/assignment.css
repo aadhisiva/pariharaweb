@@ -1,6 +1,6 @@
 .boxTitle {
   display: flex;
-  margin-left: 3rem;
+  margin-left: 1rem;
   margin-top: 1rem;
 }
 
@@ -21,8 +21,8 @@
   row-gap: 10px;
   border-color: grey;
   border-radius: 0 10px 10px 10px;
-  margin-left: 3rem;
-  margin-right: 3rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
   padding: 0.5rem;
 }
 

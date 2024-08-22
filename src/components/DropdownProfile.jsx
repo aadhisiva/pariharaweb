@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Transition from '../utils/Transition';
+import { useDispatch } from 'react-redux';
+import { userLoggedOut } from '../reducers/authReducer';
+import { UseAuth } from './customComponenets/useAuth';
 
 // import UserAvatar from '../images/user-avatar-32.png';
 
@@ -14,7 +17,10 @@ function DropdownProfile({
   const dropdown = useRef(null);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const [{ RoleName, Mobile } ] = UseAuth();
+  
   // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }) => {
@@ -37,7 +43,7 @@ function DropdownProfile({
   });
 
   const handleLogout = () => {
-    localStorage.removeItem('auth');
+    dispatch(userLoggedOut());
   }
 
   return (
@@ -49,9 +55,9 @@ function DropdownProfile({
         onClick={() => setDropdownOpen(!dropdownOpen)}
         aria-expanded={dropdownOpen}
       >
-        <img className="w-8 h-8 rounded-full" src={"S"} width="32" height="32" alt="User" />
+        {/* <img className="w-8 h-8 rounded-full" src={"S"} width="32" height="32" alt="User" /> */}
         <div className="flex items-center truncate">
-          <span className="truncate ml-2 text-sm font-medium dark:text-slate-300 group-hover:text-slate-800 dark:group-hover:text-slate-200">Admin</span>
+          <span className="truncate ml-2 text-sm font-medium dark:text-slate-300 group-hover:text-slate-800 dark:group-hover:text-slate-200">{RoleName}</span>
           <svg className="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400" viewBox="0 0 12 12">
             <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
           </svg>
@@ -74,11 +80,11 @@ function DropdownProfile({
           onBlur={() => setDropdownOpen(false)}
         >
           <div className="pt-0.5 pb-2 px-3 mb-1 border-b border-slate-200 dark:border-slate-700">
-            <div className="font-medium text-slate-800 dark:text-slate-100">Super Admin.</div>
-            <div className="text-xs text-slate-500 dark:text-slate-400 italic">Administrator</div>
+            <div className="font-medium text-slate-800 dark:text-slate-100">{RoleName}.</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400 italic">{Mobile}</div>
           </div>
           <ul>
-            <li>
+            {/* <li>
               <Link
                 className="font-medium text-sm text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center py-1 px-3"
                 to="/settings"
@@ -86,7 +92,7 @@ function DropdownProfile({
               >
                 Settings
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link
                 className="font-medium text-sm text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center py-1 px-3"

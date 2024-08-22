@@ -1,7 +1,7 @@
 import React from 'react'
 import { Form } from 'react-bootstrap'
 
-export default function TextInput({ name, required = false, type, placeholder, value, onChnage, errors, label, disabled = false, onBlur, isInvalid }) {
+export default function TextInput({ name, required = false, type='text', placeholder, value, onChnage, errors, label, disabled = false, onBlur, isInvalid }) {
     return (
         <Form.Group controlId={name}>
             <Form.Label>{label}</Form.Label>
