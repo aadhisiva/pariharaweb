@@ -32,7 +32,8 @@ export default function GramaPanchayat() {
     { accessor: "TalukCode", label: "TalukCode" },
     { accessor: "GpCode", label: "GpCode" },
     { accessor: "GpNameEn", label: "GpNameEn" },
-    { accessor: "GpNameKa", label: "GpNameKa" }
+    { accessor: "GpNameKa", label: "GpNameKa" },
+    { accessor: "Type", label: "Type" },
   ];
 
 

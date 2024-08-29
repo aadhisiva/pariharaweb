@@ -16,6 +16,7 @@ export const SelectDistricts = ({
     panchayat: "",
     taluk: "",
     village: "",
+    type: ""
   });
 
   const [districtDropDown, setDistrictDropDown] = useState([]);
@@ -38,8 +39,20 @@ export const SelectDistricts = ({
     setLoading(false);
   };
 
-  const { district, panchayat, taluk, village } = selectedItems;
+  const { district, panchayat, taluk, village, type } = selectedItems;
 
+  const handleTypeSelect = async (value) => {
+    if (type !== value) {
+      setSelectItems((prev) => ({
+        ...prev,
+        type: value,
+        district: "",
+        taluk: "",
+        panchayat: "",
+        village: ""
+      }));
+    }
+  };
   const handleDistrictSelect = async (value) => {
     if (district !== value) {
       setSelectItems((prev) => ({
@@ -47,7 +60,7 @@ export const SelectDistricts = ({
         district: value,
         taluk: "",
         panchayat: "",
-        village: "",
+        village: ""
       }));
       let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 2, UDCode: value})
       setTalukDropDown(data.data);
@@ -107,6 +120,15 @@ export const SelectDistricts = ({
         </Col>
       </Row>
       <Row className="box">
+      <Col md={3} sm={6}>
+          <SelectInput
+            defaultSelect="Select Type"
+            options={[{value: "Rural", role: "Rural"}, {value: "Urban", role: "Urban"}]}
+            onChange={(e) => handleTypeSelect(e.target.value)}
+            value={type}
+            isValueAdded={true}
+          />
+        </Col>
         <Col md={3} sm={6}>
           <SelectInput
             defaultSelect="Select District"

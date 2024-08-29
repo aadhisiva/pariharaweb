@@ -5,6 +5,8 @@ import { useForm } from '../formOptions/customValidation';
 import TextInput from '../formOptions/textInput';
 import SelectOption from '../formOptions/selectOption';
 import axiosInstance from '../../axiosInstance';
+import { mobileNoValid, nameValid } from '../../utils/Utils';
+import { UseAuth } from '../customComponenets/useAuth';
 
 export default function DistrictOffCanvas({ show, handleClose, title, handleSubmitForm, formData }) {
     const [loading, setLoading] = useState(false);
@@ -14,8 +16,12 @@ export default function DistrictOffCanvas({ show, handleClose, title, handleSubm
         DistrictId: formData.DistrictCode,
         Name: formData.Name,
         Mobile: formData.Mobile,
-        RoleId: formData.RoleId
+        RoleId: formData.RoleId,
+        Type: formData.Type
     };
+
+    const [{RoleId, Mobile, RoleName}] = UseAuth();
+
     useEffect(() => {
         getIntitalRequest();
     }, []);
@@ -23,7 +29,7 @@ export default function DistrictOffCanvas({ show, handleClose, title, handleSubm
     const getIntitalRequest = async () => {
         setLoading(true);
         let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 1 });
-        let response = await axiosInstance.post("addRolesOrGet", { ReqType: "Dropdown" });
+        let response = await axiosInstance.post("getChildBasedOnParent", { RoleId: RoleId });
         seDistrictdropdown(data.data);
         setRolesdropdown(response.data?.data);
         setLoading(false);
@@ -42,18 +48,26 @@ export default function DistrictOffCanvas({ show, handleClose, title, handleSubm
                 if (!value) {
                     return 'Name is required';
                 }
-                return null;
+                return nameValid(value);
             },
         },
         Mobile: {
             validate: (value) => {
                 if (!value) {
                     return 'Mobile is required';
+                };
+                return mobileNoValid(value);
+            },
+        },
+        RoleId: {
+            validate: (value) => {
+                if (!value) {
+                    return 'Role is required';
                 }
                 return null;
             },
         },
-        RoleId: {
+        Type: {
             validate: (value) => {
                 if (!value) {
                     return 'Role is required';
@@ -87,6 +101,18 @@ export default function DistrictOffCanvas({ show, handleClose, title, handleSubm
                 <Offcanvas.Body>
                     <Row className="justify-content-md-center mt-2">
                         <Form onSubmit={handleSubmit}>
+                        <SelectOption
+                                defaultOption="Select Type"
+                                options={[{value: "Rural", role: "Rural"}, {value: "Urban", role: "Urban"}]}
+                                name={"Type"}
+                                label='Type'
+                                isCodeAvialable={true}
+                                onChange={handleChange}
+                                value={values.Type}
+                                errors={errors.Type}
+                                onBlur={handleBlur}
+                                isInvalid={touched.Type && !!errors.Type}
+                            />
                             <SelectOption
                                 defaultOption="Select Distrcit"
                                 options={districtDropdown}
@@ -97,11 +123,10 @@ export default function DistrictOffCanvas({ show, handleClose, title, handleSubm
                                 value={values.DistrictId}
                                 errors={errors.DistrictId}
                                 onBlur={handleBlur}
-                                disabled={true}
                                 isInvalid={touched.DistrictId && !!errors.DistrictId}
                             />
                             <SelectOption
-                                defaultOption="Select Distrcit"
+                                defaultOption="Select Role"
                                 options={rolesdropdown}
                                 name={"RoleId"}
                                 label='Role'

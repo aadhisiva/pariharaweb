@@ -8,31 +8,33 @@ import axiosInstance from '../../axiosInstance';
 import { mobileNoValid, nameValid } from '../../utils/Utils';
 import { UseAuth } from '../customComponenets/useAuth';
 
-export default function TalukOffCanvas({ show, handleClose, title, handleSubmitForm, formData }) {
+export default function VillageOffCanvas({ show, handleClose, title, handleSubmitForm, formData }) {
     const [loading, setLoading] = useState(false);
-    const [districtDropdown, setDistrictdropdown] = useState([]);
+    const [districtDropdown, setDistrictDropDown] = useState([]);
     const [rolesdropdown, setRolesdropdown] = useState([]);
     const [talukDropdown, setTalukDropDown] = useState([]);
+    const [gpDropdown, setGpDropDown] = useState([]);
+    const [villageDropdown, setVillageDropDown] = useState([]);
     const initialValues = {
-        DistrictId: formData.DistrictCode,
+        DistrictId: formData.DistrictCode,  
         TalukId: formData.TalukCode,
+        GpId: formData.GpCode,
+        VillageId: formData.VillageCode,
         Name: formData.Name,
         Mobile: formData.Mobile,
-        RoleId: formData.RoleId,
-        Type: formData.Type,
+        RoleId: formData.RoleId
     };
-    const [{Mobile, RoleId}] = UseAuth();
     useEffect(() => {
         getIntitalRequest();
     }, []);
-    
+    const [{ RoleId, Mobile }] = UseAuth();
+
     const getIntitalRequest = async () => {
         setLoading(true);
         let response = await axiosInstance.post("getChildBasedOnParent", { RoleId: RoleId });
         setRolesdropdown(response.data?.data);
         setLoading(false);
-    };
-    
+    }
     const validationSchema = {
         DistrictId: {
             validate: (value) => {
@@ -42,18 +44,26 @@ export default function TalukOffCanvas({ show, handleClose, title, handleSubmitF
                 return null;
             },
         },
-        Type: {
-            validate: (value) => {
-                if (!value) {
-                    return 'Type is required';
-                }
-                return null;
-            },
-        },
         TalukId: {
             validate: (value) => {
                 if (!value) {
                     return 'Taluk Name is required';
+                }
+                return null;
+            },
+        },
+        VillageId: {
+            validate: (value) => {
+                if (!value) {
+                    return 'Village Name is required';
+                }
+                return null;
+            },
+        },
+        GpId: {
+            validate: (value) => {
+                if (!value) {
+                    return 'Gp Name is required';
                 }
                 return null;
             },
@@ -83,49 +93,6 @@ export default function TalukOffCanvas({ show, handleClose, title, handleSubmitF
             },
         },
     };
-
-    
-  const handleTypeSelect = async (e) => {
-    const {name, value} = e.target;
-    setLoading(true);
-      setValues((prev) => ({
-        ...prev,
-        Type: value,
-        DistrictId: "",
-        TalukId: ""
-      }));
-      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 1, ListType: 'District', loginType: 'District', Mobile, Type: value })
-      setDistrictdropdown(data.data);
-      setLoading(false);
-  };
-
-  const handleDistrictSelect = async (e) => { 
-    const {name, value} = e.target;
-    setLoading(true);
-    if(values.DistrictId !== value){
-        setValues((prev) => ({
-            ...prev,
-            DistrictId: value,
-            TalukId: ""
-          }));
-      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 2, UDCode: value, Type: values.Type })
-      setTalukDropDown(data.data);
-      setLoading(false);
-    };
-  };
-
-  const handleTalukSelect = async (value) => {
-    if (taluk !== value) {
-      setSelectItems((prev) => ({
-        ...prev,
-        taluk: value,
-        panchayat: "",
-        village: "",
-      }));
-      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 3, UTCode: value, UDCode: selectedItems.district, Type: type })
-      setGpDropDown(data.data);
-    }
-  };
     // Handle form submission
     const onSubmit = (values) => {
         values['id'] = formData.id;
@@ -142,6 +109,83 @@ export default function TalukOffCanvas({ show, handleClose, title, handleSubmitF
         handleSubmit,
         setValues,
     } = useForm({ initialValues, validationSchema, onSubmit });
+
+    const handleTypeSelect = async (e) => {
+        const {name, value} = e.target;
+        setLoading(true);
+        if (values.Type !== value) {
+          setValues((prev) => ({
+            ...prev,
+            Type: value,
+            DistrictId: "",
+            TalukId: "",
+            GpId: "",
+            VillageId: ""
+          }));
+          let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 1, loginType: "District",ListType: "Gp", Mobile, Type: "Rural" });
+        setDistrictDropDown(data.data);
+        setLoading(false);
+        }
+      };
+    
+      const handleDistrictSelect = async (e) => {
+        const {name, value} = e.target;
+        setLoading(true);
+        if (values.DistrictId !== value) {
+            setValues((prev) => ({
+                ...prev,
+                DistrictId: value,
+                TalukId: "",
+                GpId: "",
+                VillageId: "",
+              }));
+          let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 2, UDCode: value, loginType: "Taluk",ListType: "Gp", Mobile, Type: "Rural" })
+          setTalukDropDown(data.data);
+        }
+        setLoading(false);
+      };
+    
+      const handleTalukSelect = async (e) => {
+        const {name, value} = e.target;
+        setLoading(true);
+        if (values.TalukId !== value) {
+            setValues((prev) => ({
+                ...prev,
+                TalukId: value,
+                GpId: "",
+                VillageId: "",
+              }));
+          let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 3, UTCode: value, UDCode: values.DistrictId, loginType: "Gp", ListType: "Gp", Mobile, Type: "Rural" })
+          setGpDropDown(data.data);
+        };
+        setLoading(false);
+      };
+    
+      const handleGpSelect = async (e) => {
+        const {name, value} = e.target;
+        setLoading(true);
+        if (values.GpId !== value) {
+            setValues((prev) => ({
+                ...prev,
+                GpId: value,
+                VillageId: "",
+              }));
+          let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 4, UGCode: value, UTCode: values.TalukId, UDCode: values.DistrictId })
+          setVillageDropDown(data.data);
+        };
+        setLoading(false);
+      };
+    
+      const handleVillageSelect = (e) => {
+        const {name, value} = e.target;
+        if (values.VillageId !== value) {
+            setValues((prev) => ({
+                ...prev,
+                VillageId: value,
+              }));
+        };
+      };
+    
     return (
         <div>
             <Offcanvas show={show} onHide={handleClose} placement='end' >
@@ -151,9 +195,9 @@ export default function TalukOffCanvas({ show, handleClose, title, handleSubmitF
                 <Offcanvas.Body>
                     <Row className="justify-content-md-center mt-2">
                         <Form onSubmit={handleSubmit}>
-                            <SelectOption
+                        <SelectOption
                                 defaultOption="Select Type"
-                                options={[{value: "Rural", role: "Rural"}, {value: "Urban", role: "Urban"}]}
+                                options={[{value: "Rural", role: "Rural"}]}
                                 name={"Type"}
                                 label='Type'
                                 isCodeAvialable={true}
@@ -161,7 +205,6 @@ export default function TalukOffCanvas({ show, handleClose, title, handleSubmitF
                                 value={values.Type}
                                 errors={errors.Type}
                                 onBlur={handleBlur}
-                                // disabled={true}
                                 isInvalid={touched.Type && !!errors.Type}
                             />
                             <SelectOption
@@ -174,7 +217,6 @@ export default function TalukOffCanvas({ show, handleClose, title, handleSubmitF
                                 value={values.DistrictId}
                                 errors={errors.DistrictId}
                                 onBlur={handleBlur}
-                                // disabled={true}
                                 isInvalid={touched.DistrictId && !!errors.DistrictId}
                             />
                             <SelectOption
@@ -183,12 +225,35 @@ export default function TalukOffCanvas({ show, handleClose, title, handleSubmitF
                                 name={"TalukId"}
                                 label='Taluk'
                                 isCodeAvialable={true}
-                                onChange={handleChange}
+                                onChange={handleTalukSelect}
                                 value={values.TalukId}
                                 errors={errors.TalukId}
                                 onBlur={handleBlur}
-                                // disabled={true}
                                 isInvalid={touched.TalukId && !!errors.TalukId}
+                            />
+                            <SelectOption
+                                defaultOption="Select Panchayat"
+                                options={gpDropdown}
+                                name={"GpId"}
+                                label='Grama Panchayat'
+                                isCodeAvialable={true}
+                                onChange={handleGpSelect}
+                                value={values.GpId}
+                                errors={errors.GpId}
+                                onBlur={handleBlur}
+                                isInvalid={touched.GpId && !!errors.GpId}
+                            />
+                            <SelectOption
+                                defaultOption="Select Village"
+                                options={villageDropdown}
+                                name={"VillageId"}
+                                label='Village'
+                                isCodeAvialable={true}
+                                onChange={handleVillageSelect}
+                                value={values.VillageId}
+                                errors={errors.VillageId}
+                                onBlur={handleBlur}
+                                isInvalid={touched.VillageId && !!errors.VillageId}
                             />
                             <SelectOption
                                 defaultOption="Select Role"

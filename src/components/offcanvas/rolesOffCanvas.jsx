@@ -14,8 +14,8 @@ export default function RolesOffCanvas({ show, handleClose, title, handleSubmitF
           validate: (value) => {
             if (!value) {
               return 'Role Name is required';
-            }
-            return null;
+            };
+            return nameValid(value);
           },
         }
       };

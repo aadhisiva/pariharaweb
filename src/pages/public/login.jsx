@@ -8,6 +8,7 @@ import axiosInstance from "../../axiosInstance";
 import TextInput from "../../components/formOptions/textInput";
 import OtpVerifyPage from "./otpVerifyPage";
 import { UseAuth } from "../../components/customComponenets/useAuth";
+import { mobileNoValid } from "../../utils/Utils";
 
 const Login = () => {
   const [usersData, setUsersData] = useState([]);
@@ -28,8 +29,8 @@ const Login = () => {
       validate: (value) => {
         if (!value) {
           return "Mobile is required";
-        }
-        return null;
+        };
+        return mobileNoValid(value);
       },
     },
   };

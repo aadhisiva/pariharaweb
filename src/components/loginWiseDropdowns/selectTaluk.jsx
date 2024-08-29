@@ -16,6 +16,7 @@ export const SelectTaluk = ({
     panchayat: "",
     taluk: "",
     village: "",
+    type: ""
   });
 
   const [districtDropDown, setDistrictDropDown] = useState([]);
@@ -27,18 +28,33 @@ export const SelectTaluk = ({
 
   const [{ Mobile, RoleAccess }] = UseAuth();
 
-  useEffect(() => {
-    getIntitalFetch();
-  }, []);
+  // useEffect(() => {
+  //   getIntitalFetch();
+  // }, []);
 
-  const getIntitalFetch = async () => {
-    setLoading(true);
-    let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 1, loginType: "District", ListType: "District", Mobile });
-    setDistrictDropDown(data.data);
-    setLoading(false);
+  // const getIntitalFetch = async () => {
+  //   setLoading(true);
+  //   let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 1, loginType: "District", ListType: "District", Mobile });
+  //   setDistrictDropDown(data.data);
+  //   setLoading(false);
+  // };
+
+  const { district, panchayat, taluk, village, type } = selectedItems;
+  
+  const handleTypeSelect = async (value) => {
+    if (type !== value) {
+      setSelectItems((prev) => ({
+        ...prev,
+        type: value,
+        district: "",
+        taluk: "",
+        panchayat: "",
+        village: "",
+      }));
+      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 1, ListType: 'District', loginType: 'District', Mobile, Type: value })
+      setDistrictDropDown(data.data);
+    }
   };
-
-  const { district, panchayat, taluk, village } = selectedItems;
 
   const handleDistrictSelect = async (value) => {
     if (district !== value) {
@@ -49,7 +65,7 @@ export const SelectTaluk = ({
         panchayat: "",
         village: "",
       }));
-      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 2, UDCode: value })
+      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 2, UDCode: value, Type: type })
       setTalukDropDown(data.data);
     }
   };
@@ -62,7 +78,7 @@ export const SelectTaluk = ({
         panchayat: "",
         village: "",
       }));
-      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 3, UTCode: value, UDCode: selectedItems.district })
+      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 3, UTCode: value, UDCode: selectedItems.district, Type: type })
       setGpDropDown(data.data);
     }
   };
@@ -98,7 +114,7 @@ export const SelectTaluk = ({
       village: "",
     }));
   };
-  console.log("role", RoleAccess)
+
   return (
     <React.Fragment>
       <Row className="boxTitle">
@@ -107,6 +123,15 @@ export const SelectTaluk = ({
         </Col>
       </Row>
       <Row className="box">
+      <Col md={3} sm={6}>
+          <SelectInput
+            defaultSelect="Select Type"
+            options={[{value: "Rural", role: "Rural"}, {value: "Urban", role: "Urban"}]}
+            onChange={(e) => handleTypeSelect(e.target.value)}
+            value={type}
+            isValueAdded={true}
+          />
+        </Col>
       <Col md={3} sm={6}>
           <SelectInput
             defaultSelect="Select District"
@@ -118,7 +143,7 @@ export const SelectTaluk = ({
         </Col>
         <Col md={3} sm={6}>
           <SelectInput
-            defaultSelect="Select Taluk"
+            defaultSelect="Select Taluk/Town"
             options={talukDropDown}
             onChange={(e) => handleTalukSelect(e.target.value)}
             value={taluk}

@@ -2,7 +2,9 @@ import {
     ASSIGN_DISTRICT, ASSIGN_GP, ASSIGN_TALUK, DASHBOARD, DIS_MASTER,
     EMP_ASSIGN, EMP_MANAGE, EMP_ROLES, FEEDBACK, GP_MASTER, LOSSTYPE, LOSS_DETAILS,
     ROLE_ACCESS_PATH, ASSIGN_VILLAGE,
-    TAL_MASTER, VILLAGE_MASTER
+    TAL_MASTER, VILLAGE_MASTER,
+    ROLE_MAP_TO_CHILD,
+    ROLE_MAP_TO_LOSS
 } from "./routePaths";
 
 
@@ -21,34 +23,6 @@ export const dashBoardSats = [
     {
         name: "Total",
         count: 1000
-    },
-    {
-        name: "With Tahsildar",
-        count: 77
-    },
-    {
-        name: "With Tahsildar Grad 2",
-        count: 11
-    },
-    {
-        name: "With ADVS",
-        count: 55
-    },
-    {
-        name: "With ADA",
-        count: 44
-    },
-    {
-        name: "With ADH",
-        count: 30
-    },
-    {
-        name: "With AEE-ZP",
-        count: 10
-    },
-    {
-        name: "With AE-EEE (Urban)",
-        count: 12
     },
     {
         name: "With VA",
@@ -84,6 +58,18 @@ export const routesOfSuperAdmin = [
     {
         name: "Role Access",
         path: ROLE_ACCESS_PATH,
+        child: [],
+        icon: "bi bi-speedometer"
+    },
+    {
+        name: "Role Mapping To Child",
+        path: ROLE_MAP_TO_CHILD,
+        child: [],
+        icon: "bi bi-speedometer"
+    },
+    {
+        name: "Role Mapping To Loss",
+        path: ROLE_MAP_TO_LOSS,
         child: [],
         icon: "bi bi-speedometer"
     },
@@ -217,6 +203,7 @@ export const routesOfGp = [
         icon: "bi bi-chat-dots"
     }
 ];
+
 
 // export const tableData = [
 //     for(let i = 0; i < 100, i ++){

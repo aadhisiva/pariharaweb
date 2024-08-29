@@ -13,6 +13,7 @@ import DistrictOffCanvas from '../../components/offcanvas/districtOffCanvas';
 import TalukOffCanvas from '../../components/offcanvas/talukOffCanvas';
 import GpOffCanvas from '../../components/offcanvas/gpOffCanvas';
 import { SelectGp } from '../../components/loginWiseDropdowns/selectGp';
+import { UseAuth } from '../../components/customComponenets/useAuth';
 
 export default function AssignGP() {
   const [originalData, setOriginalData] = useState([]);
@@ -23,10 +24,12 @@ export default function AssignGP() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
 
+  const [{ Mobile, RoleName }] = UseAuth();
   const columns = [
     { accessor: "DistrictNameEn", label: "DistrictName" },
     { accessor: "TalukNameEn", label: "TalukName" },
     { accessor: "GpNameEn", label: "GpName" },
+    { accessor: "Type", label: "Type" },
     { accessor: "Mobile", label: "Mobile" },
     { accessor: "Name", label: "Name" },
     { accessor: "RoleName", label: "Role" },
@@ -56,6 +59,9 @@ export default function AssignGP() {
       Name: formData.Name,
       Mobile: formData.Mobile,
       RoleId: formData.RoleId,
+      Type: formData.Type,
+      CreatedMobile: Mobile,
+      CreatedRole: RoleName,
       id: formData.id
     };
     await axiosInstance.post("assigningProcess", body);
@@ -76,10 +82,11 @@ export default function AssignGP() {
   };
 
   const handleClickAdd = (values) => {
-    if(!values.district) return alert("Select District.");
-    if(!values.taluk) return alert("Select Taluk.");
-    if(!values.panchayat) return alert("Select Grama Panchayat.");
-   setFormData({DistrictCode: values.district, TalukCode: values.taluk, GpCode: values.panchayat})
+    // if(!values.district) return alert("Select District.");
+    // if(!values.taluk) return alert("Select Taluk.");
+    // if(!values.panchayat) return alert("Select Grama Panchayat.");
+  //  setFormData({DistrictCode: values.district, TalukCode: values.taluk, GpCode: values.panchayat, Type: values.type})
+   setFormData({})
    setShowModal(true);
    setModalTitle("Add");
   };
@@ -96,9 +103,14 @@ export default function AssignGP() {
       <SpinnerLoader isLoading={loading} />
       {showModal ? openOffCanvas() : ("")}
       <Breadcrumbs path={["Assign Gp"]} />
-      <SelectGp 
+      {/* <SelectGp 
       handleClickAdd={handleClickAdd}
-      listType={3} />
+      listType={3} /> */}
+      <Row className='flex m-2'>
+        <Col className='text-right'>
+          <ButtonComponent name={"Assign To Grama Panchayat"} onClick={handleClickAdd} />
+        </Col>
+      </Row>
       <CustomTable
         columns={columns}
         rows={originalData}

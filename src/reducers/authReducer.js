@@ -8,6 +8,7 @@ const initialState = {
   token: '',
   Mobile: '',
   Otp: '',
+  RoleId: '',
   RoleName: '',
   RoleAccess: {}
 };
@@ -17,11 +18,12 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     userLoggedIn(state, action) {
-      const { RoleAccess, Mobile, Otp, Token, RoleName} = action.payload;
+      const { RoleAccess, Mobile, Otp, Token, RoleName, RoleId} = action.payload;
       state.isLoggedIn = true;
       state.Mobile = Mobile;
       state.token = Token;
       state.Otp = Otp,
+      state.RoleId = RoleId,
       state.RoleName = RoleName,
       state.RoleAccess = RoleAccess;
     },

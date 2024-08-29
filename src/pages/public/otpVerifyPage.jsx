@@ -9,6 +9,7 @@ import TextInput from "../../components/formOptions/textInput";
 import SelectOption from "../../components/formOptions/selectOption";
 import { UseAuth } from "../../components/customComponenets/useAuth";
 import axiosInstance from "../../axiosInstance";
+import { mobileNoValid, otpValid } from "../../utils/Utils";
 
 const OtpVerifyPage = ({rolesData=[]}) => {
   const [timer, setTimer] = useState(0);
@@ -39,14 +40,14 @@ const OtpVerifyPage = ({rolesData=[]}) => {
         if (!value) {
           return "Mobile is required";
         }
-        return null;
+        return mobileNoValid(value);
       },
     },
     RoleId: {
       validate: (value) => {
         if (!value) {
           return "RoleName is required";
-        }
+        };
         return null;
       },
     },
@@ -55,7 +56,7 @@ const OtpVerifyPage = ({rolesData=[]}) => {
         if (!value) {
           return "Otp is required";
         }
-        return null;
+        return otpValid(value);
       },
     },
   };
@@ -66,7 +67,7 @@ const OtpVerifyPage = ({rolesData=[]}) => {
     if(values.Otp !== rolesData.Otp) return alert("Enter Valid Otp.");
     let findObj = (rolesData.UserData || []).find(obj => obj.RoleId == values.RoleId);
     let {data} = await axiosInstance.post("findAccessById", {RoleId: values.RoleId})
-    dispatch(userLoggedIn({...rolesData, ...{RoleName: findObj.RoleName} ,...{RoleAccess: data.data}}));
+    dispatch(userLoggedIn({...rolesData, ...{RoleName: findObj.RoleName, RoleId: values.RoleId, RoleAccess: data.data}}));
   };
 
   const {

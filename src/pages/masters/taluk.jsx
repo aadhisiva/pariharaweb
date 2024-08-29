@@ -28,6 +28,7 @@ export default function Taluk() {
     { accessor: "TalukCode", label: "TalukCode" },
     { accessor: "TalukNameEn", label: "TalukNameEn" },
     { accessor: "TalukNameKa", label: "TalukNameKa" },
+    { accessor: "Type", label: "Type" },
   ];
 
 

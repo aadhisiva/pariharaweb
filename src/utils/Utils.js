@@ -27,3 +27,21 @@ export const formatValue = (value) => Intl.NumberFormat('en-US', {
   maximumSignificantDigits: 3,
   notation: 'compact',
 }).format(value);
+
+export const mobileNoValid = (value) => {
+  const regex = /^\d{10}$/;
+  if(!regex.test(value)) return "Mobile number should be numbers and 10 digits only.";
+  return null;
+};
+
+export const nameValid = (value) => {
+  const regex = /^[A-Za-z\s'-]+$/;
+  if(!regex.test(value)) return "Enter characters only."
+  return null;
+};
+
+export const otpValid = (value) => {
+  const regex = /^\d{4}$/;
+  if(!regex.test(value)) return "Otp should be in numbers and 4 digits only."
+  return null;
+};

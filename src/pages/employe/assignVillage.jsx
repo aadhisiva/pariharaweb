@@ -1,15 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { CustomTable } from '../../components/customTable/customTable'
+import { Col, Row, Spinner } from 'react-bootstrap';
+import { postRequest } from '../../axios/axiosRequest';
 import Breadcrumbs from '../../components/common/breadcrumbs';
+import ManagementOffCanvas from '../../components/offcanvas/managementOffCanvas';
+import { ButtonComponent } from '../../components/ButtonComponent';
+import AssignmentOffCanvas from '../../components/offcanvas/assignmentOffCanvas';
 import axiosInstance from '../../axiosInstance';
 import { SpinnerLoader } from '../../components/spinner/spinner';
-import DistrictOffCanvas from '../../components/offcanvas/districtOffCanvas';
 import { SelectDistricts } from '../../components/loginWiseDropdowns/selectDistrict';
-import { Col, Row } from 'react-bootstrap';
-import { ButtonComponent } from '../../components/ButtonComponent';
+import DistrictOffCanvas from '../../components/offcanvas/districtOffCanvas';
+import TalukOffCanvas from '../../components/offcanvas/talukOffCanvas';
+import GpOffCanvas from '../../components/offcanvas/gpOffCanvas';
+import { SelectGp } from '../../components/loginWiseDropdowns/selectGp';
+import VillageOffCanvas from '../../components/offcanvas/villageOffCanvas';
+import { SelectVillage } from '../../components/loginWiseDropdowns/selectVillage';
 import { UseAuth } from '../../components/customComponenets/useAuth';
 
-export default function AssignDistrict() {
+export default function AssignVillage() {
   const [originalData, setOriginalData] = useState([]);
   const [copyOforiginalData, setCopyOfOriginalData] = useState([]);
 
@@ -18,10 +26,11 @@ export default function AssignDistrict() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
 
-  const [{Mobile, RoleName}] = UseAuth();
-
   const columns = [
     { accessor: "DistrictNameEn", label: "DistrictName" },
+    { accessor: "TalukNameEn", label: "TalukName" },
+    { accessor: "GpNameEn", label: "GpName" },
+    { accessor: "VillageNameEn", label: "VillageName" },
     { accessor: "Mobile", label: "Mobile" },
     { accessor: "Name", label: "Name" },
     { accessor: "RoleName", label: "Role" },
@@ -32,13 +41,15 @@ export default function AssignDistrict() {
     getIntitalRequest();
   }, []);
 
+  const [{RoleName, Mobile}] = UseAuth();
+
   const getIntitalRequest = async () => {
     setLoading(true);
-    let { data } = await axiosInstance.post("getAssignedMasters", { ReqType: 1 });
+    let { data } = await axiosInstance.post("getAssignedMasters", { ReqType: 4 });
     setCopyOfOriginalData(data.data);
     setOriginalData(data.data);
     setLoading(false);
-  };
+  }
 
   const handleSubmitForm = async (formData) => {
     setLoading(true);
@@ -46,11 +57,12 @@ export default function AssignDistrict() {
       ReqType: 1,
       DistrictCode: formData.DistrictId,
       TalukCode: formData.TalukId,
-      ListType: "District",
+      GpCode: formData.GpId,
+      VillageCode: formData.VillageId,
+      ListType: "Village",
       Name: formData.Name,
       Mobile: formData.Mobile,
       RoleId: formData.RoleId,
-      Type: formData.Type,
       CreatedMobile: Mobile,
       CreatedRole: RoleName,
       id: formData.id
@@ -63,7 +75,7 @@ export default function AssignDistrict() {
 
   const openOffCanvas = () => {
     return (
-      <DistrictOffCanvas
+      <VillageOffCanvas
         handleClose={() => setShowModal(false)}
         show={showModal}
         title={modalTitle}
@@ -73,8 +85,12 @@ export default function AssignDistrict() {
   };
 
   const handleClickAdd = (values) => {
-    // setFormData({ DistrictCode: values.district, Type: values.type })
-    setFormData({})
+    // if (!values.district) return alert("Select District.");
+    // if (!values.taluk) return alert("Select Taluk.");
+    // if (!values.panchayat) return alert("Select Grama Panchayat.");
+    // if (!values.village) return alert("Select Village.");
+    // setFormData({ DistrictCode: values.district, TalukCode: values.taluk, GpCode: values.panchayat, VillageCode: values.village })
+    setFormData({ })
     setShowModal(true);
     setModalTitle("Add");
   };
@@ -90,13 +106,13 @@ export default function AssignDistrict() {
     <div>
       <SpinnerLoader isLoading={loading} />
       {showModal ? openOffCanvas() : ("")}
-      <Breadcrumbs path={["Assign District"]} />
-      {/* <SelectDistricts
+      <Breadcrumbs path={["Assign Village"]} />
+      {/* <SelectVillage
       handleClickAdd={handleClickAdd}
-      listType={1} /> */}
+      listType={3} /> */}
       <Row className='flex m-2'>
         <Col className='text-right'>
-          <ButtonComponent name={"Assign To District"} onClick={handleClickAdd} />
+          <ButtonComponent name={"Assign To Village"} onClick={handleClickAdd} />
         </Col>
       </Row>
       <CustomTable

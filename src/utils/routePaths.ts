@@ -8,6 +8,8 @@ export const FEEDBACK = "/Feedback";
 export const EMP_MANAGE = "/Employee-Mangement";
 export const EMP_ASSIGN = "/Employee-Assignment";
 export const ROLE_ACCESS_PATH = "/Role-Access";
+export const ROLE_MAP_TO_LOSS = "/Role-Map-To-Loss";
+export const ROLE_MAP_TO_CHILD = "/Role-MAP-To-Child";
 
 export const EMP_ROLES = "/Employee-Roles";
 

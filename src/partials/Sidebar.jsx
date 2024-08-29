@@ -15,7 +15,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const sidebar = useRef(null);
   const [{RoleAccess}] = UseAuth();
 
-console.log("RoleAccess",RoleAccess)
+
   const navigate = useNavigate();
 
   const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');

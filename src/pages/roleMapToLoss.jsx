@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { CustomTable } from '../../components/customTable/customTable'
-import Breadcrumbs from '../../components/common/breadcrumbs';
-import axiosInstance from '../../axiosInstance';
-import { SpinnerLoader } from '../../components/spinner/spinner';
 import { Col, Row } from 'react-bootstrap';
-import { ButtonComponent } from '../../components/ButtonComponent';
-import RoleAccessOffCanvas from '../../components/offcanvas/roleAccessOffCanvas';
+import { SpinnerLoader } from '../components/spinner/spinner';
+import Breadcrumbs from '../components/common/breadcrumbs';
+import { ButtonComponent } from '../components/ButtonComponent';
+import { CustomTable } from '../components/customTable/customTable';
+import RoleToLossOffCanvas from '../components/offcanvas/roleToLossOC';
+import axiosInstance from '../axiosInstance';
 
-export default function RoleAccess() {
+export default function RoleMapToLoss() {
     const [originalData, setOriginalData] = useState([]);
     const [copyOforiginalData, setCopyOfOriginalData] = useState([]);
 
@@ -18,11 +18,10 @@ export default function RoleAccess() {
 
     const columns = [
         { accessor: "RoleName", label: "RoleName" },
-        { accessor: "District", label: "District" },
-        { accessor: "Taluk", label: "Taluk" },
-        { accessor: "Gp", label: "Grama Panchayat" },
-        { accessor: "Village", label: "Village" },
-        { accessor: "Type", label: "Type" },
+        { accessor: "PendingEkyc", label: "PendingEkyc" },
+        { accessor: "Pending", label: "Pending" },
+        { accessor: "SeekClarification", label: "SeekClarification" },
+        { accessor: "LossType", label: "LossType" },
         { accessor: "Action", label: "Action" },
     ];
 
@@ -32,7 +31,7 @@ export default function RoleAccess() {
 
     const getIntitalRequest = async () => {
         setLoading(true);
-        let { data } = await axiosInstance.post("assignRoleAccess", { ReqType: "Get" });
+        let { data } = await axiosInstance.post("assignLossAndGet", { ReqType: "Get" });
         setCopyOfOriginalData(data.data);
         setOriginalData(data.data);
         setLoading(false);
@@ -41,7 +40,7 @@ export default function RoleAccess() {
     const handleSubmitForm = async (formData) => {
         setLoading(true);
         formData.ReqType = "Add";
-        await axiosInstance.post("assignRoleAccess", formData);
+        await axiosInstance.post("assignLossAndGet", formData);
         setShowModal(false);
         await getIntitalRequest();
         setLoading(false);
@@ -49,7 +48,7 @@ export default function RoleAccess() {
 
     const openOffCanvas = () => {
         return (
-            <RoleAccessOffCanvas
+            <RoleToLossOffCanvas
                 handleClose={() => setShowModal(false)}
                 show={showModal}
                 title={modalTitle}
