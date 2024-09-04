@@ -41,7 +41,7 @@ export default function AssignVillage() {
     getIntitalRequest();
   }, []);
 
-  const [{RoleName, Mobile}] = UseAuth();
+  const [{ RoleName, Mobile }] = UseAuth();
 
   const getIntitalRequest = async () => {
     setLoading(true);
@@ -85,14 +85,13 @@ export default function AssignVillage() {
   };
 
   const handleClickAdd = (values) => {
-    // if (!values.district) return alert("Select District.");
-    // if (!values.taluk) return alert("Select Taluk.");
-    // if (!values.panchayat) return alert("Select Grama Panchayat.");
-    // if (!values.village) return alert("Select Village.");
-    // setFormData({ DistrictCode: values.district, TalukCode: values.taluk, GpCode: values.panchayat, VillageCode: values.village })
-    setFormData({ })
-    setShowModal(true);
+    if (!values.district) return alert("Select District.");
+    if (!values.taluk) return alert("Select Taluk.");
+    if (!values.panchayat) return alert("Select Grama Panchayat.");
+    if (!values.village) return alert("Select Village.");
+    setFormData({ DistrictCode: values.district, TalukCode: values.taluk, GpCode: values.panchayat, VillageCode: values.village })
     setModalTitle("Add");
+    setShowModal(true);
   };
 
   const handleClickModify = (obj) => {
@@ -107,14 +106,9 @@ export default function AssignVillage() {
       <SpinnerLoader isLoading={loading} />
       {showModal ? openOffCanvas() : ("")}
       <Breadcrumbs path={["Assign Village"]} />
-      {/* <SelectVillage
-      handleClickAdd={handleClickAdd}
-      listType={3} /> */}
-      <Row className='flex m-2'>
-        <Col className='text-right'>
-          <ButtonComponent name={"Assign To Village"} onClick={handleClickAdd} />
-        </Col>
-      </Row>
+      <SelectVillage
+        handleClickAdd={handleClickAdd}
+        listType={3} />
       <CustomTable
         columns={columns}
         rows={originalData}

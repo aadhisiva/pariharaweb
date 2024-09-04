@@ -36,7 +36,7 @@ export default function AssignTaluk() {
 
   const getIntitalRequest = async () => {
     setLoading(true);
-    let { data } = await axiosInstance.post("getAssignedMasters", { ReqType: 2 });
+    let { data } = await axiosInstance.post("getAssignedMasters", { ReqType: 'Taluk', Mobile });
     setCopyOfOriginalData(data.data);
     setOriginalData(data.data);
     setLoading(false);
@@ -75,11 +75,11 @@ export default function AssignTaluk() {
   };
 
   const handleClickAdd = (values) => {
-    // if (!values.district) return alert("Select District.");
-    // if (!values.taluk) return alert("Select Taluk.");
+    if (!values.district) return alert("Select District.");
+    if (!values.taluk) return alert("Select Taluk.");
     setFormData({ DistrictCode: values.district, TalukCode: values.taluk, Type: values.type })
-    setShowModal(true);
     setModalTitle("Add");
+    setShowModal(true);
   };
 
   const handleClickModify = (obj) => {
@@ -94,14 +94,9 @@ export default function AssignTaluk() {
       <SpinnerLoader isLoading={loading} />
       {showModal ? openOffCanvas() : ("")}
       <Breadcrumbs path={["Assign Taluk"]} />
-      {/* <SelectTaluk
+      <SelectTaluk
         handleClickAdd={handleClickAdd}
-        listType={2} /> */}
-      <Row className='flex m-2'>
-        <Col className='text-right'>
-          <ButtonComponent name={"Assign To Taluk"} onClick={handleClickAdd} />
-        </Col>
-      </Row>
+        listType={2} />
       <CustomTable
         columns={columns}
         rows={originalData}

@@ -3,6 +3,7 @@ import { Form, Offcanvas, Row } from 'react-bootstrap'
 import { ButtonComponent } from '../ButtonComponent'
 import TextInput from '../formOptions/textInput';
 import { useForm } from '../formOptions/customValidation';
+import { nameValid } from '../../utils/Utils';
 
 export default function RolesOffCanvas({ show, handleClose, title, handleSubmitForm, formData }) {
     const initialValues = {

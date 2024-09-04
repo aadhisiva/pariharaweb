@@ -28,8 +28,12 @@ export default function TalukOffCanvas({ show, handleClose, title, handleSubmitF
     
     const getIntitalRequest = async () => {
         setLoading(true);
+        let dResponse = await axiosInstance.post("getMasterDropdown", { ReqType: 1, ListType: 'District', loginType: 'District', Mobile, Type:  formData.Type })
         let response = await axiosInstance.post("getChildBasedOnParent", { RoleId: RoleId });
+        let tResponse = await axiosInstance.post("getMasterDropdown", { ReqType: 2, UDCode: formData?.DistrictCode, Type: formData.Type })
+        setDistrictdropdown(dResponse?.data.data);
         setRolesdropdown(response.data?.data);
+        setTalukDropDown(tResponse?.data?.data);
         setLoading(false);
     };
     

@@ -50,7 +50,7 @@ export const SelectGp = ({
         panchayat: "",
         village: "",
       }));
-      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 1, loginType: "District",ListType: "Taluk", Mobile, Type: type });
+      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 1, loginType: "District",ListType: "Taluk", Mobile, Type: value });
     setDistrictDropDown(data.data);
     setLoading(false);
     }
@@ -65,7 +65,7 @@ export const SelectGp = ({
         panchayat: "",
         village: "",
       }));
-      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 2, UDCode: value, loginType: "Taluk",ListType: "Taluk", Mobile, Type: type })
+      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 2, UDCode: value, loginType: "Taluk",ListType: "Taluk", Mobile, Type: type });
       setTalukDropDown(data.data);
     }
   };

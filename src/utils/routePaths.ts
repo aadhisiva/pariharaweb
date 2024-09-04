@@ -1,4 +1,4 @@
-export const DASHBOARD = "/Dashboard";
+export const DASHBOARD = "/";
 export const LOSSTYPE = "/LossTypeData";
 export const LOSS_DETAILS = "/lossDeatils";
 

@@ -31,6 +31,12 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
     const getIntitalRequest = async () => {
         setLoading(true);
         let response = await axiosInstance.post("getChildBasedOnParent", { RoleId: RoleId });
+        let dResponse = await axiosInstance.post("getMasterDropdown", { ReqType: 1, loginType: "District", ListType: "Taluk", Mobile, Type: formData.Type });
+        setDistrictDropDown(dResponse?.data.data);
+        let tResponse = await axiosInstance.post("getMasterDropdown", { ReqType: 2, UDCode: formData.DistrictCode, loginType: "Taluk", ListType: "Taluk", Mobile, Type: formData.Type })
+        setTalukDropDown(tResponse?.data.data);
+        let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 3, UTCode: formData.TalukCode, UDCode: formData.DistrictCode, Type: formData.Type })
+        setGpDropDown(data.data);
         setRolesdropdown(response.data?.data);
         setLoading(false);
     }
@@ -93,61 +99,61 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
         },
     };
 
-    
-  const handleTypeSelect = async (e) => {
-    const {name, value} = e.target;
-    if (values.Type !== value) {
-      setValues((prev) => ({
-        ...prev,
-        Type: value,
-        DistrictId: "",
-        TalukId: "",
-        GpId: "",
-      }));
-      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 1, loginType: "District",ListType: "Taluk", Mobile, Type: value });
-    setDistrictDropDown(data.data);
-    setLoading(false);
-    }
-  };
 
-  const handleDistrictSelect = async (e) => {
-    const {name, value} = e.target;
-    if (values.DistrictId !== value) {
-        setValues((prev) => ({
-            ...prev,
-            DistrictId: value,
-            TalukId: "",
-            GpId: "",
-          }));
-      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 2, UDCode: value, loginType: "Taluk",ListType: "Taluk", Mobile, Type: values.Type })
-      setTalukDropDown(data.data);
-    }
-  };
-
-  const handleTalukSelect = async (e) => {
-    const {name, value} = e.target;
-    if (values.TalukId !== value) {
-        setValues((prev) => ({
-            ...prev,
-            TalukId: value,
-            GpId: "",
-          }));
-      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 3, UTCode: value, UDCode: values.DistrictId, Type: values.Type })
-      setGpDropDown(data.data);
+    const handleTypeSelect = async (e) => {
+        const { name, value } = e.target;
+        if (values.Type !== value) {
+            setValues((prev) => ({
+                ...prev,
+                Type: value,
+                DistrictId: "",
+                TalukId: "",
+                GpId: "",
+            }));
+            let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 1, loginType: "District", ListType: "Taluk", Mobile, Type: value });
+            setDistrictDropDown(data.data);
+            setLoading(false);
+        }
     };
-  };
 
-  const handleGpSelect = async (e) => {
-    const {name, value} = e.target;
-    if (values.GpId !== value) {
-        setValues((prev) => ({
-            ...prev,
-            GpId: value,
-          }));
-      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 4, UGCode: value, UTCode: values.TalukId, UDCode: values.DistrictId })
-      setVillageDropDown(data.data);
+    const handleDistrictSelect = async (e) => {
+        const { name, value } = e.target;
+        if (values.DistrictId !== value) {
+            setValues((prev) => ({
+                ...prev,
+                DistrictId: value,
+                TalukId: "",
+                GpId: "",
+            }));
+            let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 2, UDCode: value, loginType: "Taluk", ListType: "Taluk", Mobile, Type: values.Type })
+            setTalukDropDown(data.data);
+        }
     };
-  };
+
+    const handleTalukSelect = async (e) => {
+        const { name, value } = e.target;
+        if (values.TalukId !== value) {
+            setValues((prev) => ({
+                ...prev,
+                TalukId: value,
+                GpId: "",
+            }));
+            let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 3, UTCode: value, UDCode: values.DistrictId, Type: values.Type })
+            setGpDropDown(data.data);
+        };
+    };
+
+    const handleGpSelect = async (e) => {
+        const { name, value } = e.target;
+        if (values.GpId !== value) {
+            setValues((prev) => ({
+                ...prev,
+                GpId: value,
+            }));
+            let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 4, UGCode: value, UTCode: values.TalukId, UDCode: values.DistrictId })
+            setVillageDropDown(data.data);
+        };
+    };
 
     // Handle form submission
     const onSubmit = (values) => {
@@ -155,7 +161,7 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
         // Handle form data submission here
         handleSubmitForm(values);
     };
-    
+
     const {
         values,
         errors,
@@ -174,9 +180,9 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
                 <Offcanvas.Body>
                     <Row className="justify-content-md-center mt-2">
                         <Form onSubmit={handleSubmit}>
-                        <SelectOption
+                            <SelectOption
                                 defaultOption="Select Type"
-                                options={[{value: "Rural", role: "Rural"}, {value: "Urban", role: "Urban"}]}
+                                options={[{ value: "Rural", role: "Rural" }, { value: "Urban", role: "Urban" }]}
                                 name={"Type"}
                                 label='Type'
                                 isCodeAvialable={true}

@@ -18,7 +18,7 @@ export default function AssignDistrict() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
 
-  const [{Mobile, RoleName}] = UseAuth();
+  const [{ Mobile, RoleName }] = UseAuth();
 
   const columns = [
     { accessor: "DistrictNameEn", label: "DistrictName" },
@@ -34,7 +34,7 @@ export default function AssignDistrict() {
 
   const getIntitalRequest = async () => {
     setLoading(true);
-    let { data } = await axiosInstance.post("getAssignedMasters", { ReqType: 1 });
+    let { data } = await axiosInstance.post("getAssignedMasters", { ReqType: 'District', Mobile, DataType:'All' });
     setCopyOfOriginalData(data.data);
     setOriginalData(data.data);
     setLoading(false);
@@ -73,10 +73,9 @@ export default function AssignDistrict() {
   };
 
   const handleClickAdd = (values) => {
-    // setFormData({ DistrictCode: values.district, Type: values.type })
-    setFormData({})
-    setShowModal(true);
+    setFormData({ DistrictCode: values.district, Type: values.type }) 
     setModalTitle("Add");
+    setShowModal(true);
   };
 
   const handleClickModify = (obj) => {
@@ -91,14 +90,9 @@ export default function AssignDistrict() {
       <SpinnerLoader isLoading={loading} />
       {showModal ? openOffCanvas() : ("")}
       <Breadcrumbs path={["Assign District"]} />
-      {/* <SelectDistricts
-      handleClickAdd={handleClickAdd}
-      listType={1} /> */}
-      <Row className='flex m-2'>
-        <Col className='text-right'>
-          <ButtonComponent name={"Assign To District"} onClick={handleClickAdd} />
-        </Col>
-      </Row>
+      <SelectDistricts
+        handleClickAdd={handleClickAdd}
+        listType={1} />
       <CustomTable
         columns={columns}
         rows={originalData}

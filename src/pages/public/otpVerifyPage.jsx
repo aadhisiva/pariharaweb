@@ -10,11 +10,13 @@ import SelectOption from "../../components/formOptions/selectOption";
 import { UseAuth } from "../../components/customComponenets/useAuth";
 import axiosInstance from "../../axiosInstance";
 import { mobileNoValid, otpValid } from "../../utils/Utils";
+import { useNavigate } from "react-router-dom";
 
 const OtpVerifyPage = ({rolesData=[]}) => {
   const [timer, setTimer] = useState(0);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  
   const [data] = UseAuth();
 
   const initialValues = {
@@ -68,6 +70,7 @@ const OtpVerifyPage = ({rolesData=[]}) => {
     let findObj = (rolesData.UserData || []).find(obj => obj.RoleId == values.RoleId);
     let {data} = await axiosInstance.post("findAccessById", {RoleId: values.RoleId})
     dispatch(userLoggedIn({...rolesData, ...{RoleName: findObj.RoleName, RoleId: values.RoleId, RoleAccess: data.data}}));
+    navigate("/");
   };
 
   const {

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Form, Offcanvas, Row } from 'react-bootstrap'
 import { ButtonComponent } from '../ButtonComponent'
 import { useForm } from '../formOptions/customValidation';
-import TextInput from '../formOptions/textInput';
 import SelectOption from '../formOptions/selectOption';
 import axiosInstance from '../../axiosInstance';
 

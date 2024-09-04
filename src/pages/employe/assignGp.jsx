@@ -34,7 +34,7 @@ export default function AssignGP() {
     { accessor: "Name", label: "Name" },
     { accessor: "RoleName", label: "Role" },
     { accessor: "Action", label: "Action" },
-  ]; 
+  ];
 
   useEffect(() => {
     getIntitalRequest();
@@ -42,7 +42,7 @@ export default function AssignGP() {
 
   const getIntitalRequest = async () => {
     setLoading(true);
-    let { data } = await axiosInstance.post("getAssignedMasters", {ReqType: 3});
+    let { data } = await axiosInstance.post("getAssignedMasters", { ReqType: 'Surveyer', Mobile });
     setCopyOfOriginalData(data.data);
     setOriginalData(data.data);
     setLoading(false);
@@ -51,7 +51,7 @@ export default function AssignGP() {
   const handleSubmitForm = async (formData) => {
     setLoading(true);
     let body = {
-      ReqType: 1,
+      ReqType: 3,
       DistrictCode: formData.DistrictId,
       TalukCode: formData.TalukId,
       GpCode: formData.GpId,
@@ -65,9 +65,9 @@ export default function AssignGP() {
       id: formData.id
     };
     await axiosInstance.post("assigningProcess", body);
-      setShowModal(false);
-      await getIntitalRequest();
-      setLoading(false);
+    setShowModal(false);
+    await getIntitalRequest();
+    setLoading(false);
   }
 
   const openOffCanvas = () => {
@@ -82,16 +82,15 @@ export default function AssignGP() {
   };
 
   const handleClickAdd = (values) => {
-    // if(!values.district) return alert("Select District.");
-    // if(!values.taluk) return alert("Select Taluk.");
-    // if(!values.panchayat) return alert("Select Grama Panchayat.");
-  //  setFormData({DistrictCode: values.district, TalukCode: values.taluk, GpCode: values.panchayat, Type: values.type})
-   setFormData({})
-   setShowModal(true);
-   setModalTitle("Add");
+    if (!values.district) return alert("Select District.");
+    if (!values.taluk) return alert("Select Taluk.");
+    if (!values.panchayat) return alert("Select Grama Panchayat.");
+    setFormData({ DistrictCode: values.district, TalukCode: values.taluk, GpCode: values.panchayat, Type: values.type })
+    setModalTitle("Add");
+    setShowModal(true);
   };
 
-  const handleClickModify=(obj)=>{
+  const handleClickModify = (obj) => {
     setFormData({});
     setFormData(obj);
     setModalTitle("Modify");
@@ -103,14 +102,9 @@ export default function AssignGP() {
       <SpinnerLoader isLoading={loading} />
       {showModal ? openOffCanvas() : ("")}
       <Breadcrumbs path={["Assign Gp"]} />
-      {/* <SelectGp 
-      handleClickAdd={handleClickAdd}
-      listType={3} /> */}
-      <Row className='flex m-2'>
-        <Col className='text-right'>
-          <ButtonComponent name={"Assign To Grama Panchayat"} onClick={handleClickAdd} />
-        </Col>
-      </Row>
+      <SelectGp
+        handleClickAdd={handleClickAdd}
+        listType={3} />
       <CustomTable
         columns={columns}
         rows={originalData}

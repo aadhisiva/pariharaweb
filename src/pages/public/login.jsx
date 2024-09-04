@@ -9,6 +9,7 @@ import TextInput from "../../components/formOptions/textInput";
 import OtpVerifyPage from "./otpVerifyPage";
 import { UseAuth } from "../../components/customComponenets/useAuth";
 import { mobileNoValid } from "../../utils/Utils";
+import LoginPageImage from "../../assets/login_image.png";
 
 const Login = () => {
   const [usersData, setUsersData] = useState([]);
@@ -59,7 +60,7 @@ const Login = () => {
     <section className="h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
       <div className="md:w-1/3 max-w-sm">
         <img
-          src={"../../../assets/images/login_image.webp"}
+          src={LoginPageImage}
           alt="Sample image"
         />
       </div>

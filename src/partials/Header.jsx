@@ -6,7 +6,7 @@ import Help from '../components/DropdownHelp';
 import UserMenu from '../components/DropdownProfile';
 import ThemeToggle from '../components/ThemeToggle';
 import { Image } from 'react-bootstrap';
-import GKImage from "../images/Gk.png";
+import GKImage from "../assets/gk.png";
 
 function Header({ sidebarOpen, setSidebarOpen }) {
   const [searchModalOpen, setSearchModalOpen] = useState(false);

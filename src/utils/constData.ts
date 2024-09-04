@@ -1,6 +1,6 @@
 import {
     ASSIGN_DISTRICT, ASSIGN_GP, ASSIGN_TALUK, DASHBOARD, DIS_MASTER,
-    EMP_ASSIGN, EMP_MANAGE, EMP_ROLES, FEEDBACK, GP_MASTER, LOSSTYPE, LOSS_DETAILS,
+    EMP_ROLES, GP_MASTER, LOSSTYPE, LOSS_DETAILS,
     ROLE_ACCESS_PATH, ASSIGN_VILLAGE,
     TAL_MASTER, VILLAGE_MASTER,
     ROLE_MAP_TO_CHILD,
@@ -122,6 +122,33 @@ export const routesOfSuperAdmin = [
     },
 ];
 
+export const routesOfAdmin = [
+    {
+        name: "Dashboard",
+        path: DASHBOARD,
+        child: [],
+        icon: "bi bi-speedometer"
+    },
+    {
+        name: "Assign District",
+        path: ASSIGN_DISTRICT,
+        child: [],
+        icon: "bi bi-speedometer"
+    },
+    // {
+    //     name: "Loss Data",
+    //     path: LOSSTYPE,
+    //     child: [],
+    //     icon: "bi bi-justify"
+    // },
+    // {
+    //     name: "Loss Details",
+    //     path: LOSS_DETAILS,
+    //     child: [],
+    //     icon: "bi bi-chat-dots"
+    // }
+];
+
 export const routesOfDistrict = [
     {
         name: "Dashboard",
@@ -136,18 +163,18 @@ export const routesOfDistrict = [
         child: [],
         icon: "bi bi-speedometer"
     },
-    {
-        name: "Loss Data",
-        path: LOSSTYPE,
-        child: [],
-        icon: "bi bi-justify"
-    },
-    {
-        name: "Loss Details",
-        path: LOSS_DETAILS,
-        child: [],
-        icon: "bi bi-chat-dots"
-    }
+    // {
+    //     name: "Loss Data",
+    //     path: LOSSTYPE,
+    //     child: [],
+    //     icon: "bi bi-justify"
+    // },
+    // {
+    //     name: "Loss Details",
+    //     path: LOSS_DETAILS,
+    //     child: [],
+    //     icon: "bi bi-chat-dots"
+    // }
 ];
 
 export const routesOfTaluk = [
@@ -163,18 +190,18 @@ export const routesOfTaluk = [
         child: [],
         icon: "bi bi-speedometer"
     },
-    {
-        name: "Loss Data",
-        path: LOSSTYPE,
-        child: [],
-        icon: "bi bi-justify"
-    },
-    {
-        name: "Loss Details",
-        path: LOSS_DETAILS,
-        child: [],
-        icon: "bi bi-chat-dots"
-    }
+    // {
+    //     name: "Loss Data",
+    //     path: LOSSTYPE,
+    //     child: [],
+    //     icon: "bi bi-justify"
+    // },
+    // {
+    //     name: "Loss Details",
+    //     path: LOSS_DETAILS,
+    //     child: [],
+    //     icon: "bi bi-chat-dots"
+    // }
 ];
 
 export const routesOfGp = [
@@ -190,18 +217,18 @@ export const routesOfGp = [
         child: [],
         icon: "bi bi-speedometer"
     },
-    {
-        name: "Loss Data",
-        path: LOSSTYPE,
-        child: [],
-        icon: "bi bi-justify"
-    },
-    {
-        name: "Loss Details",
-        path: LOSS_DETAILS,
-        child: [],
-        icon: "bi bi-chat-dots"
-    }
+    // {
+    //     name: "Loss Data",
+    //     path: LOSSTYPE,
+    //     child: [],
+    //     icon: "bi bi-justify"
+    // },
+    // {
+    //     name: "Loss Details",
+    //     path: LOSS_DETAILS,
+    //     child: [],
+    //     icon: "bi bi-chat-dots"
+    // }
 ];
 
 

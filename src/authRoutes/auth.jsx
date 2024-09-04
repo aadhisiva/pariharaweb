@@ -11,7 +11,9 @@ function Auth() {
   const [{isLoggedIn}] = UseAuth();
 
   return (
-    <Fragment>{!isLoggedIn ? <PublicRoutes /> : <PrivateRoutes />}</Fragment>
+    <Fragment>
+      
+    </Fragment>
   );
 }
 
