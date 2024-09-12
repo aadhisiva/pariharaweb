@@ -6,8 +6,8 @@ import { store } from './store/configureStore';
 
 const axiosInstance = axios.create({
   // baseURL: 'http://10.10.140.162/api/admin', // Replace with your API base URL
-  baseURL: 'http://localhost:8881/api/admin/', // Replace with your API base URL
-  // baseURL: 'https://spectacles.karnataka.gov.in/wapi/admin', // Replace with your API base URL
+  // baseURL: 'http://localhost:8881/api/admin/', // Replace with your API base URL
+  baseURL: 'https://parihara3.karnataka.gov.in/api/admin', // Replace with your API base URL
 });
 
 axiosInstance.interceptors.request.use(
@@ -16,7 +16,7 @@ axiosInstance.interceptors.request.use(
     const token = state.user.token;
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
-    }
+    };
     return config;
   },
   (error) => {
@@ -40,7 +40,7 @@ axiosInstance.interceptors.response.use(
         store.dispatch(userLoggedOut());
         store.dispatch(clearSessionEndTime());
         // Optionally redirect to login page
-        window.location.href = '/login';
+        window.location.href = '/web/login';
         break;
 
       case 403:

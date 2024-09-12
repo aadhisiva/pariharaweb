@@ -165,7 +165,7 @@ export default function TalukOffCanvas({ show, handleClose, title, handleSubmitF
                                 value={values.Type}
                                 errors={errors.Type}
                                 onBlur={handleBlur}
-                                // disabled={true}
+                                disabled={true}
                                 isInvalid={touched.Type && !!errors.Type}
                             />
                             <SelectOption
@@ -178,7 +178,7 @@ export default function TalukOffCanvas({ show, handleClose, title, handleSubmitF
                                 value={values.DistrictId}
                                 errors={errors.DistrictId}
                                 onBlur={handleBlur}
-                                // disabled={true}
+                                disabled={true}
                                 isInvalid={touched.DistrictId && !!errors.DistrictId}
                             />
                             <SelectOption
@@ -191,7 +191,7 @@ export default function TalukOffCanvas({ show, handleClose, title, handleSubmitF
                                 value={values.TalukId}
                                 errors={errors.TalukId}
                                 onBlur={handleBlur}
-                                // disabled={true}
+                                disabled={true}
                                 isInvalid={touched.TalukId && !!errors.TalukId}
                             />
                             <SelectOption

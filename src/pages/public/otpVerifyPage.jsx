@@ -62,11 +62,13 @@ const OtpVerifyPage = ({rolesData=[]}) => {
       },
     },
   };
-
+  
   // Handle form submission
   const onSubmit = async (values) => {
     // Handle form data submission here
-    if(values.Otp !== rolesData.Otp) return alert("Enter Valid Otp.");
+    let response = await axiosInstance.post("verifyOtp", {Mobile: rolesData?.Mobile, Otp: values?.Otp});
+    console.log("response?.data",response?.data)
+    if(response?.data?.code !== 200) return;
     let findObj = (rolesData.UserData || []).find(obj => obj.RoleId == values.RoleId);
     let {data} = await axiosInstance.post("findAccessById", {RoleId: values.RoleId})
     dispatch(userLoggedIn({...rolesData, ...{RoleName: findObj.RoleName, RoleId: values.RoleId, RoleAccess: data.data}}));

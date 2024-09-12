@@ -22,6 +22,10 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
         Mobile: formData.Mobile,
         RoleId: formData.RoleId,
         Type: formData.Type,
+        PDOMobile: formData.PDOMobile,
+        AEOMobile: formData.AEOMobile,
+        PDOName: formData.PDOName,
+        AEOName: formData.AEOName,
     };
     useEffect(() => {
         getIntitalRequest();
@@ -95,6 +99,38 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
                     return 'Role is required';
                 };
                 return null;
+            },
+        },
+        PDOMobile: {
+            validate: (value) => {
+                if (!value) {
+                    return 'PDOMobile is required';
+                };
+                return mobileNoValid(value);
+            },
+        },
+        AEOMobile: {
+            validate: (value) => {
+                if (!value) {
+                    return 'AEOMobile is required';
+                };
+                return mobileNoValid(value);
+            },
+        },
+        PDOName: {
+            validate: (value) => {
+                if (!value) {
+                    return 'PDOName is required';
+                };
+                return nameValid(value);
+            },
+        },
+        AEOName: {
+            validate: (value) => {
+                if (!value) {
+                    return 'AEOName is required';
+                };
+                return nameValid(value);
             },
         },
     };
@@ -190,6 +226,7 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
                                 value={values.Type}
                                 errors={errors.Type}
                                 onBlur={handleBlur}
+                                disabled={true}
                                 isInvalid={touched.Type && !!errors.Type}
                             />
                             <SelectOption
@@ -202,6 +239,7 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
                                 value={values.DistrictId}
                                 errors={errors.DistrictId}
                                 onBlur={handleBlur}
+                                disabled={true}
                                 isInvalid={touched.DistrictId && !!errors.DistrictId}
                             />
                             <SelectOption
@@ -214,6 +252,7 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
                                 value={values.TalukId}
                                 errors={errors.TalukId}
                                 onBlur={handleBlur}
+                                disabled={true}
                                 isInvalid={touched.TalukId && !!errors.TalukId}
                             />
                             <SelectOption
@@ -226,6 +265,7 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
                                 value={values.GpId}
                                 errors={errors.GpId}
                                 onBlur={handleBlur}
+                                disabled={true}
                                 isInvalid={touched.GpId && !!errors.GpId}
                             />
                             <SelectOption
@@ -241,7 +281,7 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
                                 isInvalid={touched.RoleId && !!errors.RoleId}
                             />
                             <TextInput
-                                label={"Name"}
+                                label={"VA Name"}
                                 name={"Name"}
                                 onChnage={handleChange}
                                 placeholder={"Enter Role"}
@@ -251,7 +291,7 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
                                 errors={errors.Name}
                             />
                             <TextInput
-                                label={"Mobile"}
+                                label={"VA Mobile"}
                                 name={"Mobile"}
                                 onChnage={handleChange}
                                 placeholder={"Enter Role"}
@@ -259,6 +299,48 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
                                 isInvalid={touched.Mobile && !!errors.Mobile}
                                 onBlur={handleBlur}
                                 errors={errors.Mobile}
+                            />
+                            {/* Pdo details */}
+                            <TextInput
+                                label={"PDO Name"}
+                                name={"PDOName"}
+                                onChnage={handleChange}
+                                placeholder={"Enter PDOName"}
+                                value={values.PDOName}
+                                isInvalid={touched.PDOName && !!errors.PDOName}
+                                onBlur={handleBlur}
+                                errors={errors.PDOName}
+                            />
+                            <TextInput
+                                label={"PDO Mobile"}
+                                name={"PDOMobile"}
+                                onChnage={handleChange}
+                                placeholder={"Enter PDOMobile"}
+                                value={values.PDOMobile}
+                                isInvalid={touched.PDOMobile && !!errors.PDOMobile}
+                                onBlur={handleBlur}
+                                errors={errors.PDOMobile}
+                            />
+                            {/* AEO details */}
+                            <TextInput
+                                label={"AEO Name"}
+                                name={"AEOName"}
+                                onChnage={handleChange}
+                                placeholder={"Enter AEOName"}
+                                value={values.AEOName}
+                                isInvalid={touched.AEOName && !!errors.AEOName}
+                                onBlur={handleBlur}
+                                errors={errors.AEOName}
+                            />
+                            <TextInput
+                                label={"AEO Mobile"}
+                                name={"AEOMobile"}
+                                onChnage={handleChange}
+                                placeholder={"Enter AEOMobile"}
+                                value={values.AEOMobile}
+                                isInvalid={touched.AEOMobile && !!errors.AEOMobile}
+                                onBlur={handleBlur}
+                                errors={errors.AEOMobile}
                             />
                             <div className='flex flex-row justify-between'>
                                 <ButtonComponent className='mt-2 border-collapse' color='#cc3300' name={"Cancel"} onClick={handleClose} />

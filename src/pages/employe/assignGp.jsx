@@ -33,6 +33,10 @@ export default function AssignGP() {
     { accessor: "Mobile", label: "Mobile" },
     { accessor: "Name", label: "Name" },
     { accessor: "RoleName", label: "Role" },
+    { accessor: "PDOName", label: "PDOName" },
+    { accessor: "PDOMobile", label: "PDOMobile" },
+    { accessor: "AEOMobile", label: "AEOMobile" },
+    { accessor: "AEOName", label: "AEOName" },
     { accessor: "Action", label: "Action" },
   ];
 
@@ -62,7 +66,11 @@ export default function AssignGP() {
       Type: formData.Type,
       CreatedMobile: Mobile,
       CreatedRole: RoleName,
-      id: formData.id
+      id: formData.id,
+      PDOMobile: formData.PDOMobile,
+      AEOMobile: formData.AEOMobile,
+      PDOName: formData.PDOName,
+      AEOName: formData.AEOName,
     };
     await axiosInstance.post("assigningProcess", body);
     setShowModal(false);

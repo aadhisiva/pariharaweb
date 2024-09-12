@@ -15,11 +15,12 @@ function Dashboard() {
         <Col className='text-right text-blue-600' md={12}>Welcome, {RoleName}</Col>
       </Row>
       <Row className="gap-y-5">
-        {(sats || []).map((obj, i) => (
+        {/* {(sats || []).map((obj, i) => (
           <Col key={i} md={3}>
             <CardComponent title={obj?.name} text={obj?.count ?? 0} />
           </Col>
-        ))}
+        ))} */}
+        <h4 className='text-center'>No data available.....</h4>
       </Row>
     </div>
   );

@@ -111,6 +111,7 @@ export default function DistrictOffCanvas({ show, handleClose, title, handleSubm
                                 value={values.Type}
                                 errors={errors.Type}
                                 onBlur={handleBlur}
+                                disabled={true}
                                 isInvalid={touched.Type && !!errors.Type}
                             />
                             <SelectOption
@@ -123,6 +124,7 @@ export default function DistrictOffCanvas({ show, handleClose, title, handleSubm
                                 value={values.DistrictId}
                                 errors={errors.DistrictId}
                                 onBlur={handleBlur}
+                                disabled={true}
                                 isInvalid={touched.DistrictId && !!errors.DistrictId}
                             />
                             <SelectOption
