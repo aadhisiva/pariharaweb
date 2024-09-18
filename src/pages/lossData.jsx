@@ -2,6 +2,9 @@ import React, { Fragment, useState } from 'react'
 import { CustomTable } from '../components/customTable/customTable'
 import { ResuableDropDownList } from '../components/resuableDropDownList';
 import Breadcrumbs from '../components/common/breadcrumbs';
+import { SelectLossDistrict } from '../components/loginWiseDropdowns/lossData/selectLossDistrict';
+import axiosInstance from '../axiosInstance';
+import { SpinnerLoader } from '../components/spinner/spinner';
 
 const newArray = [];
 for (let i = 0; i < 100; i++) {
@@ -19,38 +22,53 @@ for (let i = 0; i < 100; i++) {
 }
 
 export default function LossData() {
-    const [originalData, setOriginalData] = useState(newArray);
-    const [copyOforiginalData, setCopyOfOriginalData] = useState(newArray);
+    const [originalData, setOriginalData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [copyOforiginalData, setCopyOfOriginalData] = useState([]);
 
     const columns = [
         { accessor: "SubmissionId", label: "CaseNumber" },
         { accessor: "ApplicantName", label: "Applicant Name" },
         { accessor: "LossType", label: "LossType" },
         { accessor: "Mobile", label: "Mobile" },
+        { accessor: "ApplicantHouseType", label: "Applicant House Type" },
+        { accessor: "DamageType", label: "DamageType" },
         { accessor: "CreatedDate", label: "Claim Date" },
-        { accessor: "Hobli", label: "Hobli" },
-        { accessor: "VillageName", label: "Village" },
-        { accessor: "Status", label: "Status" },
+        { accessor: "SurveyStatus", label: "Status" },
         { accessor: "Action", label: "Action" },
     ];
 
-    const handleClickAdd = () => {
+    const handleClickAdd = async (values) => {
+        const { district, panchayat, taluk, village, type } = values;
+        setLoading(true);
+        let { data } = await axiosInstance.post("getLossDatabySearch",
+            {
+                District: district,
+                Taluk: taluk,
+                Gp: panchayat,
+                Village: village,
+                Type: type,
+                StartDate: "",
+                EndDate: ""
+            });
+        setOriginalData(data.data);
+        setCopyOfOriginalData(data.data);
+        setLoading(false);
+    };
 
-    }
+    console.log("originalData",originalData)
     return (
         <div>
+            <SpinnerLoader isLoading={loading} />
             <Breadcrumbs path={["Loss Data"]} />
-            <ResuableDropDownList
+            <SelectLossDistrict
                 handleClickAdd={handleClickAdd}
-                listType={0}
-                setCopyOriginalData={setCopyOfOriginalData}
-                originalData={originalData} />
+                listType={3} />
             <div className='border m-2'>
                 <CustomTable
                     rows={originalData}
                     title={"View"}
                     columns={columns}
-                //   handleCLickModify={}
                 />
             </div>
         </div>
