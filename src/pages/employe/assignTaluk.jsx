@@ -35,11 +35,15 @@ export default function AssignTaluk() {
   }, []);
 
   const getIntitalRequest = async () => {
-    setLoading(true);
-    let { data } = await axiosInstance.post("getAssignedMasters", { ReqType: 'Taluk', Mobile });
-    setCopyOfOriginalData(data.data);
-    setOriginalData(data.data);
-    setLoading(false);
+    try {
+      setLoading(true);
+      let { data } = await axiosInstance.post("getAssignedMasters", { ReqType: 'Taluk', Mobile });
+      setCopyOfOriginalData(data.data);
+      setOriginalData(data.data);
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+    }
   }
 
   const handleSubmitForm = async (formData) => {

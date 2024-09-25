@@ -85,18 +85,6 @@ export const routesOfSuperAdmin = [
         child: [],
         icon: "bi bi-justify"
     },
-    // {
-    //     name: "Feedback",
-    //     path: FEEDBACK,
-    //     child: [],
-    //     icon: "bi bi-chat-dots"
-    // },
-    {
-        name: "Loss Details",
-        path: LOSS_DETAILS,
-        child: [],
-        icon: "bi bi-chat-dots"
-    },
     {
         name: "Masters",
         path: (DIS_MASTER || TAL_MASTER || GP_MASTER || VILLAGE_MASTER),
@@ -135,6 +123,12 @@ export const routesOfAdmin = [
         child: [],
         icon: "bi bi-speedometer"
     },
+    {
+        name: "Loss Data",
+        path: LOSSTYPE,
+        child: [],
+        icon: "bi bi-justify"
+    }
     // {
     //     name: "Loss Data",
     //     path: LOSSTYPE,
@@ -163,6 +157,12 @@ export const routesOfDistrict = [
         child: [],
         icon: "bi bi-speedometer"
     },
+    {
+        name: "Loss Data",
+        path: LOSSTYPE,
+        child: [],
+        icon: "bi bi-justify"
+    },
     // {
     //     name: "Loss Data",
     //     path: LOSSTYPE,
@@ -189,6 +189,12 @@ export const routesOfTaluk = [
         path: ASSIGN_GP,
         child: [],
         icon: "bi bi-speedometer"
+    },
+    {
+        name: "Loss Data",
+        path: LOSSTYPE,
+        child: [],
+        icon: "bi bi-justify"
     },
     // {
     //     name: "Loss Data",

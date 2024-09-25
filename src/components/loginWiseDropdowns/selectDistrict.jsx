@@ -33,10 +33,14 @@ export const SelectDistricts = ({
   }, []);
 
   const getIntitalFetch = async () => {
-    setLoading(true);
-    let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 1 });
-    setDistrictDropDown(data.data);
-    setLoading(false);
+    try {
+      setLoading(true);
+      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 1 });
+      setDistrictDropDown(data.data);
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+    }
   };
 
   const { district, panchayat, taluk, village, type } = selectedItems;
@@ -62,7 +66,7 @@ export const SelectDistricts = ({
         panchayat: "",
         village: ""
       }));
-      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 2, UDCode: value})
+      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 2, UDCode: value })
       setTalukDropDown(data.data);
     }
   };
@@ -120,10 +124,10 @@ export const SelectDistricts = ({
         </Col>
       </Row>
       <Row className="box">
-      <Col md={3} sm={6}>
+        <Col md={3} sm={6}>
           <SelectInput
             defaultSelect="Select Type"
-            options={[{value: "Rural", role: "Rural"}, {value: "Urban", role: "Urban"}]}
+            options={[{ value: "Rural", role: "Rural" }, { value: "Urban", role: "Urban" }]}
             onChange={(e) => handleTypeSelect(e.target.value)}
             value={type}
             isValueAdded={true}

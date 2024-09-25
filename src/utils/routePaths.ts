@@ -1,6 +1,7 @@
 export const DASHBOARD = "/";
 export const LOSSTYPE = "/LossTypeData";
-export const LOSS_DETAILS = "/lossDeatils";
+export const LOSS_DETAILS = "/lossDeatils/:SubmissionId";
+export const LOSS_PREVIEW = "/lossPreview/:id/:SubmissionId";
 
 export const LOGIN = "/login";
 export const DASHBOARD_SATS = "/Dashboard-Statistics";

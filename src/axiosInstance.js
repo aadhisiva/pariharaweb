@@ -6,8 +6,8 @@ import { store } from './store/configureStore';
 
 const axiosInstance = axios.create({
   // baseURL: 'http://10.10.140.162/api/admin', // Replace with your API base URL
-  baseURL: 'http://localhost:8881/api/admin/', // Replace with your API base URL
-  // baseURL: 'https://parihara3.karnataka.gov.in/api/admin', // Replace with your API base URL
+  // baseURL: 'http://localhost:8881/api/admin/', // Replace with your API base URL
+  baseURL: 'https://parihara3.karnataka.gov.in/api/admin', // Replace with your API base URL
 });
 
 axiosInstance.interceptors.request.use(
@@ -29,48 +29,46 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     const { response } = error;
+      if (!response) {
+        // Network or other error
+        return Promise.reject(error);
+      };
 
-    if (!response) {
-      // Network or other error
-      return Promise.reject(error);
-    };
+      switch (response.status) {
+        case 401:
+          store.dispatch(userLoggedOut());
+          store.dispatch(clearSessionEndTime());
+          // Optionally redirect to login page
+          window.location.href = '/web/login';
+          break;
 
-    switch (response.status) {
-      case 401:
-        store.dispatch(userLoggedOut());
-        store.dispatch(clearSessionEndTime());
-        // Optionally redirect to login page
-        window.location.href = '/web/login';
-        break;
+        case 403:
+          // Handle forbidden access
+          alert('You do not have permission to perform this action.');
+          break;
 
-      case 403:
-        // Handle forbidden access
-        alert('You do not have permission to perform this action.');
-        break;
+        case 404:
+          // Handle resource not found
+          alert(response.data.message || 'The requested resource was not found.');
+          // Optionally, you can redirect to a 404 page
+          // window.location.href = '/404';
+          break;
 
-      case 404:
-        // Handle resource not found
-        alert(response.data.message || 'The requested resource was not found.');
-        // Optionally, you can redirect to a 404 page
-        // window.location.href = '/404';
-        break;
+        case 422:
+          // Handle validation errors
+          // const validationErrors = response.data.errors;
+          // console.log('Validation Errors:', validationErrors);
+          alert(response.data.message || 'Please Try again.');
+          // You can handle these errors in your components accordingly
+          break;
 
-      case 422:
-        // Handle validation errors
-        // const validationErrors = response.data.errors;
-        // console.log('Validation Errors:', validationErrors);
-        alert(response.data.message || 'Please Try again.' );
-        // You can handle these errors in your components accordingly
-        break;
+        default:
+          // Handle other errors
+          return alert(response.data.message);
+      }
 
-      default:
-        // Handle other errors
-        console.error('Error:', response?.data?.message);
-        return alert(response.data.message);
-    }
-
-    return {code: 400, message: response?.data?.message};
+      return { code: 400, message: response?.data?.message };
   }
-  );
+);
 
 export default axiosInstance;

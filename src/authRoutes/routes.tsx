@@ -8,6 +8,7 @@ import {
 import { PrivateAuthRoute } from "./privateAuthRoute";
 import { ASSIGN_DISTRICT, ASSIGN_GP, ASSIGN_TALUK, ASSIGN_VILLAGE, DIS_MASTER, 
   EMP_ASSIGN, EMP_MANAGE, EMP_ROLES, GP_MASTER, LOSSTYPE, LOSS_DETAILS, 
+  LOSS_PREVIEW, 
   ROLE_ACCESS_PATH, ROLE_MAP_TO_CHILD, ROLE_MAP_TO_LOSS, TAL_MASTER, VILLAGE_MASTER } from "../utils/routePaths";
 import ErrorBoundary from "../utils/ErrorBoundary";
 
@@ -15,6 +16,7 @@ import ErrorBoundary from "../utils/ErrorBoundary";
 const DashBoardLazy = lazy(() => import("../pages/Dashboard"));
 const LossDataLazy = lazy(() => import("../pages/lossData"));
 const LossDetailsLazy = lazy(() => import("../pages/lossDetails"));
+const LossPreviewLazy = lazy(() => import("../pages/lossPreview"));
 
 const EmpAssignemntLazy = lazy(() => import("../pages/employe/assignment"));
 const EmpManagementLazy = lazy(() => import("../pages/employe/management"));
@@ -45,6 +47,7 @@ export default function AuthRoutes() {
           <Route index Component={DashBoardLazy} />
           <Route path={LOSSTYPE} Component={LossDataLazy} />
           <Route path={LOSS_DETAILS} Component={LossDetailsLazy} />
+          <Route path={LOSS_PREVIEW} Component={LossPreviewLazy} />
 
           <Route path={EMP_ASSIGN} Component={EmpAssignemntLazy} />
           <Route path={EMP_MANAGE} Component={EmpManagementLazy} />

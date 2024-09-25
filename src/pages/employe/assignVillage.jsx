@@ -44,11 +44,15 @@ export default function AssignVillage() {
   const [{ RoleName, Mobile }] = UseAuth();
 
   const getIntitalRequest = async () => {
-    setLoading(true);
-    let { data } = await axiosInstance.post("getAssignedMasters", { ReqType: 4 });
-    setCopyOfOriginalData(data.data);
-    setOriginalData(data.data);
-    setLoading(false);
+    try {
+      setLoading(true);
+      let { data } = await axiosInstance.post("getAssignedMasters", { ReqType: 4 });
+      setCopyOfOriginalData(data.data);
+      setOriginalData(data.data);
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+    }
   }
 
   const handleSubmitForm = async (formData) => {

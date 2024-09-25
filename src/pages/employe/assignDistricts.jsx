@@ -33,11 +33,15 @@ export default function AssignDistrict() {
   }, []);
 
   const getIntitalRequest = async () => {
-    setLoading(true);
-    let { data } = await axiosInstance.post("getAssignedMasters", { ReqType: 'District', Mobile, DataType:'All' });
-    setCopyOfOriginalData(data.data);
-    setOriginalData(data.data);
-    setLoading(false);
+    try {
+      setLoading(true);
+      let { data } = await axiosInstance.post("getAssignedMasters", { ReqType: 'District', Mobile, DataType: 'All' });
+      setCopyOfOriginalData(data.data);
+      setOriginalData(data.data);
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+    }
   };
 
   const handleSubmitForm = async (formData) => {
@@ -73,7 +77,7 @@ export default function AssignDistrict() {
   };
 
   const handleClickAdd = (values) => {
-    setFormData({ DistrictCode: values.district, Type: values.type }) 
+    setFormData({ DistrictCode: values.district, Type: values.type })
     setModalTitle("Add");
     setShowModal(true);
   };

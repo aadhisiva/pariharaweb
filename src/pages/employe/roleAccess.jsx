@@ -32,10 +32,14 @@ export default function RoleAccess() {
 
     const getIntitalRequest = async () => {
         setLoading(true);
-        let { data } = await axiosInstance.post("assignRoleAccess", { ReqType: "Get" });
-        setCopyOfOriginalData(data.data);
-        setOriginalData(data.data);
-        setLoading(false);
+        try {
+            let { data } = await axiosInstance.post("assignRoleAccess", { ReqType: "Get" });
+            setCopyOfOriginalData(data.data);
+            setOriginalData(data.data);
+            setLoading(false);
+        } catch (e) {
+            setLoading(false);
+        }
     }
 
     const handleSubmitForm = async (formData) => {

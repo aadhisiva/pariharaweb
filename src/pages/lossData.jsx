@@ -1,31 +1,27 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { CustomTable } from '../components/customTable/customTable'
 import { ResuableDropDownList } from '../components/resuableDropDownList';
 import Breadcrumbs from '../components/common/breadcrumbs';
 import { SelectLossDistrict } from '../components/loginWiseDropdowns/lossData/selectLossDistrict';
 import axiosInstance from '../axiosInstance';
 import { SpinnerLoader } from '../components/spinner/spinner';
-
-const newArray = [];
-for (let i = 0; i < 100; i++) {
-    let obj = {
-        SubmissionId: `SubmissionId ${i}`,
-        ApplicantName: `ApplicantName ${i}`,
-        LossType: `LossType ${i}`,
-        Mobile: `Mobile ${i}`,
-        CreatedDate: `CreatedDate ${i}`,
-        Hobli: `Hobli ${i}`,
-        VillageName: `VillageName ${i}`,
-        Status: `Status ${i}`
-    }
-    newArray.push(obj);
-}
+import { TableWithPagination } from '../components/TableWithPagination/tableWithPagination';
+import { useNavigate } from 'react-router-dom';
+import { LOSS_DETAILS } from '../utils/routePaths';
 
 export default function LossData() {
     const [originalData, setOriginalData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [copyOforiginalData, setCopyOfOriginalData] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
 
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [activePage, setActivePage] = useState(1);
+
+    const [searchObject, setSearchObject] = useState({});
+    const [searching, setSearching] = useState(false);
+
+    const navigate = useNavigate(); //for switch pages
     const columns = [
         { accessor: "SubmissionId", label: "CaseNumber" },
         { accessor: "ApplicantName", label: "Applicant Name" },
@@ -33,30 +29,53 @@ export default function LossData() {
         { accessor: "Mobile", label: "Mobile" },
         { accessor: "ApplicantHouseType", label: "Applicant House Type" },
         { accessor: "DamageType", label: "DamageType" },
-        { accessor: "CreatedDate", label: "Claim Date" },
+        { accessor: "CreatedDate", label: "Applied Date" },
         { accessor: "SurveyStatus", label: "Status" },
         { accessor: "Action", label: "Action" },
     ];
+    useEffect(() => {
+        if (searching) {
+            getDataFromApi();
+        }
+    }, [rowsPerPage, activePage, searching, searchObject]);
 
-    const handleClickAdd = async (values) => {
-        const { district, panchayat, taluk, village, type } = values;
+    const getDataFromApi = async () => {
+        const { district, panchayat, taluk, village, type, lossType, surveyStatus } = searchObject;
         setLoading(true);
-        let { data } = await axiosInstance.post("getLossDatabySearch",
-            {
-                District: district,
-                Taluk: taluk,
-                Gp: panchayat,
-                Village: village,
-                Type: type,
-                StartDate: "",
-                EndDate: ""
-            });
-        setOriginalData(data.data);
-        setCopyOfOriginalData(data.data);
-        setLoading(false);
+        try {
+            let { data } = await axiosInstance.post("getLossDatabySearch",
+                {
+                    District: district || null,
+                    Taluk: taluk || null,
+                    Gp: panchayat || null,
+                    Village: village || null,
+                    Type: type || null,
+                    StartDate: null,
+                    EndDate: null,
+                    PageNumber: activePage,
+                    RowsPerPage: rowsPerPage,
+                    LossType: lossType || null,
+                    SurveyStatus: surveyStatus || null
+                });
+            setOriginalData(data.data?.TotalData);
+            setTotalCount(data.data?.TotalCount);
+            setCopyOfOriginalData(data.data?.TotalData);
+            setLoading(false);
+        } catch (e) {
+            setLoading(false);
+        }
     };
 
-    console.log("originalData",originalData)
+    const handleClickAdd = async (values) => {
+        setSearchObject(values);
+        setSearching(true);
+    };
+
+    const handleClickModify = (obj) => {
+        if (!obj.SubmissionId) return;
+        navigate(`/lossDeatils/${obj.SubmissionId}`);
+    }; // checking submissionId and switching page for deatils
+
     return (
         <div>
             <SpinnerLoader isLoading={loading} />
@@ -65,10 +84,16 @@ export default function LossData() {
                 handleClickAdd={handleClickAdd}
                 listType={3} />
             <div className='border m-2'>
-                <CustomTable
+                <TableWithPagination
+                    handleClickModify={handleClickModify}
                     rows={originalData}
-                    title={"View"}
+                    title={"History"}
                     columns={columns}
+                    rowsPerPage={rowsPerPage}
+                    setRowsPerPage={setRowsPerPage}
+                    activePage={activePage}
+                    setActivePage={setActivePage}
+                    totalCount={totalCount}
                 />
             </div>
         </div>

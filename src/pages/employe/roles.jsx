@@ -27,11 +27,15 @@ export default function Roles() {
 
     const getIntitalRequest = async () => {
         setLoading(true);
-        let saveData = await postRequest("addRolesOrGet", { ReqType: "Get" });
-        setOriginalData(saveData);
-        setCopyOfOriginalData(saveData);
-        setShowModal(false);
-        setLoading(false);
+        try {
+            let saveData = await postRequest("addRolesOrGet", { ReqType: "Get" });
+            setOriginalData(saveData);
+            setCopyOfOriginalData(saveData);
+            setShowModal(false);
+            setLoading(false);
+        } catch (e) {
+            setLoading(false);
+        }
     }
 
     const hanldeClickAdd = () => {

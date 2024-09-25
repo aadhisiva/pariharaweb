@@ -16,7 +16,9 @@ export const SelectLossDistrict = ({
     panchayat: "",
     taluk: "",
     village: "",
-    type: ""
+    type: "",
+    lossType: "",
+    surveyStatus: ""
   });
 
   const [districtDropDown, setDistrictDropDown] = useState([]);
@@ -26,10 +28,16 @@ export const SelectLossDistrict = ({
   const [loading, setLoading] = useState(false);
 
 
-  const [{ Mobile }] = UseAuth();
+  const [{ Mobile, RoleAccess }] = UseAuth();
 
-  const { district, panchayat, taluk, village, type } = selectedItems;
-    
+  const { district, panchayat, taluk, village, type, lossType, surveyStatus } = selectedItems;
+
+  let assignReqType = RoleAccess.District == "Yes" ? "" :
+    RoleAccess.Taluk == "Yes" ? "District" :
+      RoleAccess.Gp == "Yes" ? "Taluk" : "";
+
+  const checkAdmin = RoleAccess.District == "Yes";
+
   const handleTypeSelect = async (value) => {
     if (type !== value) {
       setSelectItems((prev) => ({
@@ -39,10 +47,12 @@ export const SelectLossDistrict = ({
         taluk: "",
         panchayat: "",
         village: "",
+        lossType: "",
+        surveyStatus: ""
       }));
-      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 1, Type: value });
-    setDistrictDropDown(data.data);
-    setLoading(false);
+      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 1, loginType: checkAdmin ? "" : "District", ListType: assignReqType, Mobile, Type: value });
+      setDistrictDropDown(data.data);
+      setLoading(false);
     }
   };
 
@@ -54,8 +64,10 @@ export const SelectLossDistrict = ({
         taluk: "",
         panchayat: "",
         village: "",
+        lossType: "",
+        surveyStatus: ""
       }));
-      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 2, UDCode: value, Type: type });
+      let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 2, UDCode: value, loginType: checkAdmin ? "" : "Taluk", ListType: assignReqType, Mobile, Type: type });
       setTalukDropDown(data.data);
     }
   };
@@ -67,6 +79,8 @@ export const SelectLossDistrict = ({
         taluk: value,
         panchayat: "",
         village: "",
+        lossType: "",
+        surveyStatus: ""
       }));
       let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 3, UTCode: value, UDCode: selectedItems.district, Type: type })
       setGpDropDown(data.data);
@@ -79,6 +93,8 @@ export const SelectLossDistrict = ({
         ...prev,
         panchayat: value,
         village: "",
+        lossType: "",
+        surveyStatus: ""
       }));
       let { data } = await axiosInstance.post("getMasterDropdown", { ReqType: 4, UGCode: value, UTCode: selectedItems.taluk, UDCode: selectedItems.district })
       setVillageDropDown(data.data);
@@ -90,7 +106,28 @@ export const SelectLossDistrict = ({
       setSelectItems((prev) => ({
         ...prev,
         village: value,
+        lossType: "",
+        surveyStatus: ""
       }));
+    };
+  };
+
+  const handleLoss = (value) => {
+    if (lossType !== value) {
+      setSelectItems({
+        ...selectedItems,
+        lossType: value,
+        surveyStatus: ""
+      });
+    };
+  };
+
+  const handleStatus = (value) => {
+    if (lossType !== value) {
+      setSelectItems({
+        ...selectedItems,
+        surveyStatus: value
+      });
     };
   };
 
@@ -102,9 +139,22 @@ export const SelectLossDistrict = ({
       type: "",
       taluk: "",
       village: "",
-      Type: ""
+      Type: "",
+      lossType: "",
+      surveyStatus: ""
     }));
   };
+
+  const statusType = [
+    { value: "Pending Ekyc", role: "Pending Ekyc" },
+    { value: "Pending", role: "Pending" },
+    { value: "Seek Clarification", role: "Seek Clarification" },
+    { value: "Approved", role: "Approved" },
+    { value: "Rejected", role: "Rejected" }];
+
+  const lossTypes = [
+    { value: "House Loss", role: "House Loss" }
+  ];
 
   return (
     <React.Fragment>
@@ -114,10 +164,10 @@ export const SelectLossDistrict = ({
         </Col>
       </Row>
       <Row className="box">
-      <Col md={3} sm={6}>
+        <Col md={3} sm={6}>
           <SelectInput
             defaultSelect="Select Type"
-            options={[{value: "Rural", role: "Rural"}, {value: "Urban", role: "Urban"}]}
+            options={[{ value: "Rural", role: "Rural" }, { value: "Urban", role: "Urban" }]}
             onChange={(e) => handleTypeSelect(e.target.value)}
             value={type}
             isValueAdded={true}
@@ -160,11 +210,29 @@ export const SelectLossDistrict = ({
           />
         </Col>
         <Col md={3} sm={6}>
+          <SelectInput
+            defaultSelect="Select Loss"
+            options={lossTypes}
+            onChange={(e) => handleLoss(e.target.value)}
+            value={lossType}
+            isValueAdded={true}
+          />
+        </Col>
+        <Col md={3} sm={6}>
+          <SelectInput
+            defaultSelect="Select Status"
+            options={statusType}
+            onChange={(e) => handleStatus(e.target.value)}
+            value={surveyStatus}
+            isValueAdded={true}
+          />
+        </Col>
+        <Col md={3} sm={6}>
           <Button
             style={{ backgroundColor: "#13678C" }}
             onClick={() => handleClickAdd(selectedItems)}
           >
-            Add User
+            Search Result
           </Button>
         </Col>
         <Col md={3} sm={6}>

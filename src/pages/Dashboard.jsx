@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Col, Container, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import CardComponent from '../components/Card';
-import { dashBoardSats } from '../utils/constData';
 import { UseAuth } from '../components/customComponenets/useAuth';
 import { SpinnerLoader } from '../components/spinner/spinner';
 import axiosInstance from '../axiosInstance';
@@ -11,17 +10,25 @@ function Dashboard() {
   const [sats, setSats] = useState([{}]);
   const [loading, setLoading] = useState(false);
 
-  const [{ RoleName, Mobile }] = UseAuth();
+  const [{ RoleName, Mobile, RoleAccess }] = UseAuth();
+
+  let assignReqType = RoleAccess.District == "Yes" ? "District" :
+    RoleAccess.Taluk == "Yes" ? "Taluk" :
+      RoleAccess.Gp == "Yes" ? "Gp" : "";
 
   useEffect(() => {
     getIntitalRequest();
   }, []);
 
   const getIntitalRequest = async () => {
-    setLoading(true);
-    let { data } = await axiosInstance.post("getCountsByRole", { ReqType: 'District', Mobile, DataType: 'All' });
-    setSats(data.data);
-    setLoading(false);
+    try {
+      setLoading(true);
+      let { data } = await axiosInstance.post("getCountsByRole", { ReqType: assignReqType, Mobile, DataType: 'All' });
+      setSats(data.data);
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,7 +45,6 @@ function Dashboard() {
             </Col>
           )))
         }
-        <h4 className='text-center'>No data available.....</h4>
       </Row>
     </div>
   );
