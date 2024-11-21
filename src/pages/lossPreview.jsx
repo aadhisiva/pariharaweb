@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Card, Col, Container, Image, Row } from "react-bootstrap";
 import axiosInstance from "../axiosInstance";
 import { SpinnerLoader } from "../components/spinner/spinner";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { AccordionComponent } from "../components/Accordian";
+import { ButtonComponent } from "../components/ButtonComponent";
 
 const LossPreview = () => {
   const [preview, setPreview] = useState([{ sample: "sample" }]);
   const [imgAndVideo, setImgAndVideos] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const { id, SubmissionId } = useParams();
+  const { id, SubmissionId } = useLocation().state;
+  const navigate = useNavigate();
 
   useEffect(() => {
     getDataFromApi();
@@ -36,12 +38,21 @@ const LossPreview = () => {
     }
   }; // fetch data from api - getRecordById
 
+  const handleBack = (obj) => {
+    navigate(-1);
+  };
+
   const images = imgAndVideo.filter((record) => record.Url?.includes("getImage") == true);
   const videos = imgAndVideo.filter((record) => record.Url?.includes("getVideo") == true);
 
   return (
     <div className="m-3">
       <SpinnerLoader isLoading={loading} />
+      <Row>
+        <Col md={2}>
+          <ButtonComponent name={"Back"} onClick={handleBack} color={"#25A813"} />
+        </Col>
+      </Row>
       <AccordionComponent className="mt-3" title={"Preview Deails"}>
         <Card className="my-4 p-4">
           {Object.entries(preview[0]).map(([key, value], index) => (

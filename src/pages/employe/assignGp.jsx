@@ -75,6 +75,8 @@ export default function AssignGP() {
       AEOMobile: formData.AEOMobile,
       PDOName: formData.PDOName,
       AEOName: formData.AEOName,
+      AEORoleId: formData.AEORoleId,
+      PDORoleId: formData.PDORoleId,
     };
     await axiosInstance.post("assigningProcess", body);
     setShowModal(false);

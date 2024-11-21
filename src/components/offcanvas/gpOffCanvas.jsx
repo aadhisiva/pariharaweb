@@ -20,12 +20,11 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
         GpId: formData.GpCode,
         Name: formData.Name,
         Mobile: formData.Mobile,
-        RoleId: formData.RoleId,
         Type: formData.Type,
         PDOMobile: formData.PDOMobile,
         AEOMobile: formData.AEOMobile,
         PDOName: formData.PDOName,
-        AEOName: formData.AEOName,
+        AEOName: formData.AEOName
     };
     useEffect(() => {
         getIntitalRequest();
@@ -43,7 +42,8 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
         setGpDropDown(data.data);
         setRolesdropdown(response.data?.data);
         setLoading(false);
-    }
+    };
+
     const validationSchema = {
         DistrictId: {
             validate: (value) => {
@@ -91,14 +91,6 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
                     return 'Mobile is required';
                 };
                 return mobileNoValid(value);
-            },
-        },
-        RoleId: {
-            validate: (value) => {
-                if (!value) {
-                    return 'Role is required';
-                };
-                return null;
             },
         },
         PDOMobile: {
@@ -194,6 +186,9 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
     // Handle form submission
     const onSubmit = (values) => {
         values['id'] = formData.id;
+        values.RoleId = rolesdropdown.find(obj => obj.role.includes('VA') == true)?.value;
+        values.AEORoleId = rolesdropdown.find(obj => obj.role.includes('AEO') == true)?.value;
+        values.PDORoleId = rolesdropdown.find(obj => obj.role.includes('PDO') == true)?.value;
         // Handle form data submission here
         handleSubmitForm(values);
     };
@@ -268,7 +263,7 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
                                 disabled={true}
                                 isInvalid={touched.GpId && !!errors.GpId}
                             />
-                            <SelectOption
+                            {/* <SelectOption
                                 defaultOption="Select Role"
                                 options={rolesdropdown}
                                 name={"RoleId"}
@@ -279,7 +274,7 @@ export default function GpOffCanvas({ show, handleClose, title, handleSubmitForm
                                 errors={errors.RoleId}
                                 onBlur={handleBlur}
                                 isInvalid={touched.RoleId && !!errors.RoleId}
-                            />
+                            /> */}
                             <TextInput
                                 label={"VA Name"}
                                 name={"Name"}

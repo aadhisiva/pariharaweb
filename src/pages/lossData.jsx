@@ -38,9 +38,10 @@ export default function LossData() {
             getDataFromApi();
         }
     }, [rowsPerPage, activePage, searching, searchObject]);
-
+    
     const getDataFromApi = async () => {
         const { district, panchayat, taluk, village, type, lossType, surveyStatus } = searchObject;
+
         setLoading(true);
         try {
             let { data } = await axiosInstance.post("getLossDatabySearch",
@@ -73,7 +74,12 @@ export default function LossData() {
 
     const handleClickModify = (obj) => {
         if (!obj.SubmissionId) return;
-        navigate(`/lossDeatils/${obj.SubmissionId}`);
+        navigate(`/lossDeatils`, {
+                state: {
+                    SubmissionId: obj.SubmissionId,  // Passing current table rows as state
+                    Status: obj.SurveyStatus,  // Example: If you are paginating
+                  },
+        });
     }; // checking submissionId and switching page for deatils
 
     return (
